@@ -1,0 +1,44 @@
+services:
+  app:
+    image: ghcr.io/t0n003c/lablens:latest
+    pull_policy: always
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-lablens}:${POSTGRES_PASSWORD:-lablens_dev_password}@db:5432/${POSTGRES_DB:-lablens}?schema=public
+      UPLOAD_DIR: /app/data/uploads
+    ports:
+      - "3000:3000"
+    volumes:
+      - lablens_uploads:/app/data/uploads
+    healthcheck:
+      test: ["CMD", "node", "scripts/container-healthcheck.mjs"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    restart: unless-stopped
+
+  db:
+    image: postgres:17-alpine
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-lablens}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-lablens_dev_password}
+      POSTGRES_DB: ${POSTGRES_DB:-lablens}
+    volumes:
+      - lablens_postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-lablens} -d ${POSTGRES_DB:-lablens}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+volumes:
+  lablens_postgres:
+  lablens_uploads:

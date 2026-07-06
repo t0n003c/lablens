@@ -17,7 +17,7 @@ LabLens is not a doctor. It flags values against supplied reference ranges and a
 ## Quick Start
 
 1. Copy `.env.example` to `.env` and replace secrets.
-2. Start the database and app:
+2. Start the database and app from local source:
 
 ```bash
 docker compose up --build
@@ -35,6 +35,25 @@ Demo login after seeding:
 
 - Email: `demo@lablens.local`
 - Password: `ChangeMeNow!2026`
+
+## NAS Image Deployment
+
+For a NAS that should pull a prebuilt image instead of building the app:
+
+```bash
+cp .env.example .env
+docker compose -f docker-compose.image.yml pull
+docker compose -f docker-compose.image.yml up -d
+```
+
+Future updates:
+
+```bash
+docker compose -f docker-compose.image.yml pull
+docker compose -f docker-compose.image.yml up -d
+```
+
+The image is published as `ghcr.io/t0n003c/lablens:latest` from the `main` branch.
 
 ## Local Development
 

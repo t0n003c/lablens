@@ -92,6 +92,9 @@ SMOKE_BASE_URL=http://localhost:3000 npm run smoke
 ## Audit Checklist
 
 - `npm run audit:deps`
+- `docker compose config --quiet`
+- `docker compose -f docker-compose.image.yml config --quiet`
+- `docker build -t lablens-audit .`
 - Confirm `.env` is ignored.
 - Confirm raw PDF storage policy.
 - Confirm reverse proxy body-size limits.
