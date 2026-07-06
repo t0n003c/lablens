@@ -3,13 +3,21 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci
 
+FROM --platform=$BUILDPLATFORM node:26-alpine AS prisma
+WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm ci
+COPY prisma ./prisma
+COPY prisma.config.ts ./prisma.config.ts
+RUN npx prisma generate
+
 FROM node:26-alpine AS builder
 WORKDIR /app
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV DATABASE_URL="postgresql://lablens:lablens_dev_password@localhost:5432/lablens?schema=public"
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-RUN npx prisma generate
+COPY --from=prisma /app/src/generated/prisma ./src/generated/prisma
 RUN npm run build
 
 FROM node:26-alpine AS runner
