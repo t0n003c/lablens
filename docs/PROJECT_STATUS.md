@@ -25,6 +25,7 @@ Last updated: 2026-07-06
 - Added PWA install support with manifest, phone icons, service worker registration, and a mobile install prompt. The service worker avoids caching health data.
 - Added image-based NAS deployment support through `docker-compose.image.yml` and a GitHub Container Registry workflow that publishes `ghcr.io/t0n003c/lablens:latest`.
 - Made the container healthcheck NAS-friendly by checking multiple local app addresses before reporting the app unhealthy.
+- Updated NAS/image compose and `.env.nas.example` guidance so Postgres stays on a private Docker network, production database passwords are required, and `DATA_ENCRYPTION_KEY` is documented as a stable future-encryption secret.
 - Added editable PDF review/finalize flow so users can correct extracted rows, skip untrusted rows, and regenerate summaries before relying on the report.
 - Added saved next-step habits from recommendations, with active/done/remove controls on the dashboard and export/delete coverage.
 - Updated Settings deletion to return users to the dashboard after data removal so the cleared state is visible immediately.

@@ -41,7 +41,9 @@ Demo login after seeding:
 For a NAS that should pull a prebuilt image instead of building the app:
 
 ```bash
-cp .env.example .env
+cp .env.nas.example .env
+# Edit .env first: set APP_URL, SESSION_SECRET, POSTGRES_PASSWORD,
+# and DATA_ENCRYPTION_KEY before the first database start.
 docker compose -f docker-compose.image.yml pull
 docker compose -f docker-compose.image.yml up -d
 ```
@@ -54,6 +56,20 @@ docker compose -f docker-compose.image.yml up -d
 ```
 
 The image is published as `ghcr.io/t0n003c/lablens:latest` from the `main` branch.
+
+Use `.env.example` for local development and `.env.nas.example` for NAS or
+Dockge image deployment.
+
+The image compose file exposes only the app port and keeps Postgres on a private
+Docker network. Generate secrets with commands such as:
+
+```bash
+openssl rand -hex 32
+```
+
+`DATA_ENCRYPTION_KEY` is reserved for future app-level encryption migrations. Set
+one stable random value now and keep it safe, but note that the current version
+still relies on NAS disk or volume encryption for data at rest.
 
 ## Local Development
 
@@ -106,6 +122,7 @@ npm run audit:deps
 - `docs/adr/0001-stack-and-hosting.md` records the first architecture decision.
 - `.codex/skills/health-report-app/` contains project-local Codex guidance.
 - `.codex/agents/` contains project-specific agent prompts for future reviews.
+- `.env.example` is the local development template; `.env.nas.example` is the NAS/Dockge template.
 
 ## Backup And Restore
 
@@ -127,6 +144,6 @@ docker run --rm -v lablens_uploads:/data -v "$PWD":/backup alpine tar xzf /backu
 
 ## Production Notes
 
-Use a reverse proxy with HTTPS, request-size limits, and rate limiting. Set strong values for `SESSION_SECRET`, database password, and any AI provider secret. Prefer local AI for sensitive data when possible.
+Use a reverse proxy with HTTPS, request-size limits, and rate limiting. Set strong values for `SESSION_SECRET`, `POSTGRES_PASSWORD`, `DATA_ENCRYPTION_KEY`, and any AI provider secret. Prefer local AI for sensitive data when possible.
 
 Biometric login uses the browser's WebAuthn platform support. `localhost` works for development, but phone or LAN testing should use HTTPS so Face ID, fingerprint, device PIN, or the platform biometric prompt is available.

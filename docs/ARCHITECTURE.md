@@ -9,6 +9,8 @@ LabLens uses Next.js App Router as a full-stack app because it keeps NAS hosting
 - `app`: Next.js standalone server, Prisma migrations on startup, mounted upload volume.
 - `db`: PostgreSQL 17 Alpine with health check and persistent volume.
 - Volumes: `lablens_postgres`, `lablens_uploads`.
+- `docker-compose.yml`: local source-build workflow with the database published on host port `5433` for development tools.
+- `docker-compose.image.yml`: NAS/image workflow using `ghcr.io/t0n003c/lablens:latest`, a private `lablensInternal` database network, and no published Postgres port.
 
 ## Folder Structure
 
@@ -100,6 +102,7 @@ The WebAuthn challenge is stored in an HTTP-only, same-site, signed cookie for f
 - Biometric bypass: sessions are created only after password, optional TOTP, and WebAuthn verification have all passed.
 - Sensitive uploads: raw PDF storage disabled by default.
 - Sensitive browser storage: PWA service worker avoids caching lab data or authenticated pages.
+- Sensitive database data at rest: rely on NAS disk or volume encryption today; `DATA_ENCRYPTION_KEY` is reserved for future app-level field encryption migrations and should remain stable once set.
 
 ## AI Behavior
 

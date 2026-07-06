@@ -53,7 +53,7 @@ export function getEnvWarnings() {
   }
 
   if (!env.DATA_ENCRYPTION_KEY) {
-    warnings.push("DATA_ENCRYPTION_KEY is not configured; database-level encryption is not enabled by the app.");
+    warnings.push("DATA_ENCRYPTION_KEY is not configured; future app-level encryption migrations will need one stable key.");
   }
 
   return warnings;

@@ -15,6 +15,7 @@ LabLens is educational software. It explains trends and flags values against sup
 - TOTP 2FA setup and verification routes exist.
 - Biometric login uses WebAuthn platform credentials as a second step after password, with short-lived signed challenge cookies.
 - Audit logs cover login, upload, report creation, settings changes, and security events.
+- `DATA_ENCRYPTION_KEY` can be set now and kept stable for future app-level encryption migrations, but the current version does not yet encrypt saved lab values at the application field level.
 
 ## HIPAA-Like Precautions
 
@@ -30,12 +31,12 @@ Self-hosting does not automatically make the app HIPAA compliant. Treat the app 
 
 ## Secrets
 
-Never commit `.env`. Rotate `SESSION_SECRET`, database passwords, Turnstile secrets, and AI keys if exposed.
+Never commit `.env`. Rotate `SESSION_SECRET`, database passwords, Turnstile secrets, AI keys, and `DATA_ENCRYPTION_KEY` if exposed. Once app-level field encryption is added, rotating `DATA_ENCRYPTION_KEY` will require a planned data re-encryption flow.
 
 ## Future Hardening
 
 - Password reset email adapter.
 - Per-report delete/export endpoints.
-- Optional field-level encryption for lab values.
+- Optional field-level encryption for lab values using the stable `DATA_ENCRYPTION_KEY`.
 - Proxy-level request throttling.
 - Security headers and CSP tuning.
