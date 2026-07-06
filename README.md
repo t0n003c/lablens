@@ -1,36 +1,113 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# LabLens
 
-## Getting Started
+LabLens is a self-hosted health report app for uploading MyQuest Diagnostics PDF lab reports, reviewing extracted lab values, and generating cautious plain-English summaries with general food, exercise, lifestyle, and doctor-follow-up prompts.
 
-First, run the development server:
+LabLens is not a doctor. It flags values against supplied reference ranges and avoids diagnosis or treatment claims.
+
+## Stack
+
+- Next.js App Router, TypeScript, Tailwind CSS
+- PostgreSQL with Prisma migrations
+- Local email/password auth, secure password hashing, session cookies, TOTP 2FA, and biometric login with WebAuthn
+- PDF extraction with `pdf-parse`
+- AI abstraction through `.env`: `mock`, `local`, or OpenAI-compatible endpoint
+- Docker Compose for NAS hosting
+- Phone-installable PWA support
+
+## Quick Start
+
+1. Copy `.env.example` to `.env` and replace secrets.
+2. Start the database and app:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+docker compose up --build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+3. Open `http://localhost:3000`.
+4. Optional demo seed from a local shell:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run db:generate
+npm run db:seed
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Demo login after seeding:
 
-## Learn More
+- Email: `demo@lablens.local`
+- Password: `ChangeMeNow!2026`
 
-To learn more about Next.js, take a look at the following resources:
+## Local Development
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm install
+npm run db:generate
+docker compose up -d db
+npm run db:migrate
+npm run db:seed
+npm run dev -- --port 3010
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+The local development database is exposed on host port `5433` to avoid common conflicts with other Postgres containers.
 
-## Deploy on Vercel
+Health check:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+curl http://localhost:3010/api/health
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Expected local test response:
+
+```json
+{"status":"ok","service":"lablens","database":"ok","warnings":[]}
+```
+
+If you only need framework development without the database:
+
+```bash
+npm install
+npm run db:generate
+npm run dev
+```
+
+Useful checks:
+
+```bash
+npm run test
+npm run lint
+npm run build
+SMOKE_BASE_URL=http://localhost:3010 npm run smoke
+npm run audit:deps
+```
+
+## Important Files
+
+- `docs/PROJECT_STATUS.md` tracks current progress and next work.
+- `docs/ARCHITECTURE.md` records the system design.
+- `docs/DESIGN_DECISIONS.md` records product and UI decisions.
+- `docs/adr/0001-stack-and-hosting.md` records the first architecture decision.
+- `.codex/skills/health-report-app/` contains project-local Codex guidance.
+- `.codex/agents/` contains project-specific agent prompts for future reviews.
+
+## Backup And Restore
+
+PostgreSQL data lives in the `lablens_postgres` Docker volume. Raw PDFs are disabled by default; if enabled, uploads live in `lablens_uploads`.
+
+Backup:
+
+```bash
+docker compose exec db pg_dump -U "$POSTGRES_USER" "$POSTGRES_DB" > lablens-backup.sql
+docker run --rm -v lablens_uploads:/data -v "$PWD":/backup alpine tar czf /backup/lablens-uploads.tgz /data
+```
+
+Restore:
+
+```bash
+docker compose exec -T db psql -U "$POSTGRES_USER" "$POSTGRES_DB" < lablens-backup.sql
+docker run --rm -v lablens_uploads:/data -v "$PWD":/backup alpine tar xzf /backup/lablens-uploads.tgz -C /
+```
+
+## Production Notes
+
+Use a reverse proxy with HTTPS, request-size limits, and rate limiting. Set strong values for `SESSION_SECRET`, database password, and any AI provider secret. Prefer local AI for sensitive data when possible.
+
+Biometric login uses the browser's WebAuthn platform support. `localhost` works for development, but phone or LAN testing should use HTTPS so Face ID, fingerprint, device PIN, or the platform biometric prompt is available.

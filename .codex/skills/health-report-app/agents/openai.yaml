@@ -1,0 +1,4 @@
+interface:
+  display_name: "Health Report App Builder"
+  short_description: "Build this private self-hosted lab app"
+  default_prompt: "Use $health-report-app to implement a safe feature in this self-hosted lab report app."

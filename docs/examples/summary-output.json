@@ -1,0 +1,32 @@
+{
+  "overall": [
+    "5 lab values reviewed across 4 categories.",
+    "3 values may need closer review based on the provided reference ranges."
+  ],
+  "flags": [
+    {
+      "testName": "Hemoglobin A1c",
+      "flag": "HIGH",
+      "explanation": "Hemoglobin A1c is marked high against the supplied reference range. Confirm this with your clinician, especially if symptoms or prior trends differ."
+    }
+  ],
+  "categories": [
+    {
+      "name": "Glucose",
+      "bullets": ["1 result in this category.", "Hemoglobin A1c is high."]
+    }
+  ],
+  "recommendations": {
+    "food": [
+      "A1c is 5.7%. Rebuild your most carb-heavy meal: protein and vegetables first, then a smaller high-fiber carb portion.",
+      "For A1c, cut back on sweet drinks, juice, sweet coffee, desserts, white bread, white rice, and other refined carbs; start with the one you have most often."
+    ],
+    "exercise": ["For A1c, try a 10-20 minute easy walk after the meal that usually has the most carbs, if that is safe for you."],
+    "lifestyle": [
+      "Set a simple weekday rule for sweet drinks or desserts, such as saving them for planned times instead of making them an automatic habit."
+    ],
+    "sleep": ["A1c can drift upward when sleep is short or irregular. Aim for a steady bedtime/wake time and at least 7 hours when possible."],
+    "askDoctor": ["How this result fits with your history, medications, symptoms, and prior reports."]
+  },
+  "disclaimer": "LabLens explains lab data for general education only. It does not diagnose, treat, or replace a clinician."
+}

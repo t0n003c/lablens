@@ -1,0 +1,17 @@
+{
+  "labName": "Quest Diagnostics",
+  "reportDate": "06/15/2026",
+  "results": [
+    {
+      "testName": "Hemoglobin A1c",
+      "category": "Glucose",
+      "value": 5.7,
+      "unit": "%",
+      "referenceLow": 4.8,
+      "referenceHigh": 5.6,
+      "referenceRangeRaw": "4.8-5.6",
+      "flag": "HIGH"
+    }
+  ],
+  "warnings": []
+}

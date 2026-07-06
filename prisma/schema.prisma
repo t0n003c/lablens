@@ -1,0 +1,236 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum ReportSource {
+  PDF
+  MANUAL
+  DEMO
+}
+
+enum ReportStatus {
+  DRAFT
+  REVIEWED
+  FINALIZED
+  FAILED
+}
+
+enum LabFlag {
+  NORMAL
+  LOW
+  HIGH
+  BORDERLINE
+  CONCERNING
+  UNKNOWN
+}
+
+enum AuditAction {
+  REGISTER
+  LOGIN_SUCCESS
+  LOGIN_FAILURE
+  LOGOUT
+  UPLOAD_CREATED
+  REPORT_CREATED
+  REPORT_UPDATED
+  REPORT_DELETED
+  EXPORT_CREATED
+  SETTINGS_CHANGED
+  DATA_DELETED
+  PASSWORD_RESET_REQUEST
+  PASSWORD_RESET_COMPLETE
+  TWO_FACTOR_ENABLED
+  TWO_FACTOR_DISABLED
+  PASSKEY_REGISTERED
+  ACTION_PLAN_CHANGED
+}
+
+model User {
+  id                  String           @id @default(cuid())
+  email               String           @unique
+  name                String
+  passwordHash        String
+  role                Role             @default(USER)
+  twoFactorSecret     String?
+  twoFactorEnabled    Boolean          @default(false)
+  passkeyEnabled      Boolean          @default(false)
+  recoveryTokenHash   String?
+  recoveryTokenExpiry DateTime?
+  createdAt           DateTime         @default(now())
+  updatedAt           DateTime         @updatedAt
+  auditLogs           AuditLog[]
+  actionPlanItems     ActionPlanItem[]
+  passkeys            Passkey[]
+  people              PersonProfile[]
+  reports             HealthReport[]
+  sessions            Session[]
+  settings            UserSettings?
+}
+
+model PersonProfile {
+  id               String           @id @default(cuid())
+  userId           String
+  name             String
+  isDefault        Boolean          @default(false)
+  profileAge       Int?
+  profileGender    String?
+  profileCountry   String?
+  profileEthnicity String?
+  profileJob       String?
+  profileHobbies   String?
+  profileRoutine   String?
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+  actionPlanItems  ActionPlanItem[]
+  reports          HealthReport[]
+  user             User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([userId, isDefault])
+}
+
+model UserSettings {
+  id               String   @id @default(cuid())
+  userId           String   @unique
+  theme            String   @default("system")
+  storeRawPdfs     Boolean  @default(false)
+  turnstileEnabled Boolean  @default(false)
+  localAiPreferred Boolean  @default(true)
+  profileAge       Int?
+  profileGender    String?
+  profileCountry   String?
+  profileEthnicity String?
+  profileJob       String?
+  profileHobbies   String?
+  profileRoutine   String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Session {
+  id        String    @id @default(cuid())
+  userId    String
+  tokenHash String    @unique
+  ipAddress String?
+  userAgent String?
+  expiresAt DateTime
+  revokedAt DateTime?
+  createdAt DateTime  @default(now())
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+model Passkey {
+  id           String    @id @default(cuid())
+  userId       String
+  credentialId String    @unique
+  publicKey    Bytes
+  counter      BigInt    @default(0)
+  deviceType   String?
+  backedUp     Boolean   @default(false)
+  transports   String[]
+  createdAt    DateTime  @default(now())
+  lastUsedAt   DateTime?
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model HealthReport {
+  id                  String           @id @default(cuid())
+  userId              String
+  personId            String
+  source              ReportSource
+  status              ReportStatus     @default(DRAFT)
+  reportDate          DateTime
+  labName             String?
+  originalFileName    String?
+  storedFilePath      String?
+  extractedTextHash   String?
+  parserWarnings      String[]         @default([])
+  summaryJson         Json?
+  recommendationsJson Json?
+  notes               String?
+  createdAt           DateTime         @default(now())
+  updatedAt           DateTime         @updatedAt
+  labResults          LabResult[]
+  actionPlanItems     ActionPlanItem[]
+  person              PersonProfile    @relation(fields: [personId], references: [id], onDelete: Cascade)
+  user                User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, reportDate])
+  @@index([userId, personId, reportDate])
+  @@index([personId])
+  @@index([status])
+}
+
+model LabResult {
+  id                String       @id @default(cuid())
+  reportId          String
+  testName          String
+  category          String       @default("Other")
+  value             Decimal?     @db.Decimal(12, 4)
+  stringValue       String?
+  unit              String?
+  referenceLow      Decimal?     @db.Decimal(12, 4)
+  referenceHigh     Decimal?     @db.Decimal(12, 4)
+  referenceRangeRaw String?
+  flag              LabFlag      @default(UNKNOWN)
+  notes             String?
+  displayOrder      Int          @default(0)
+  createdAt         DateTime     @default(now())
+  report            HealthReport @relation(fields: [reportId], references: [id], onDelete: Cascade)
+
+  @@index([reportId])
+  @@index([testName])
+  @@index([category])
+  @@index([flag])
+}
+
+model ActionPlanItem {
+  id          String        @id @default(cuid())
+  userId      String
+  personId    String
+  reportId    String?
+  category    String
+  text        String
+  status      String        @default("ACTIVE")
+  notes       String?
+  completedAt DateTime?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  person      PersonProfile @relation(fields: [personId], references: [id], onDelete: Cascade)
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  report      HealthReport? @relation(fields: [reportId], references: [id], onDelete: SetNull)
+
+  @@index([userId, status])
+  @@index([personId, status])
+  @@index([reportId])
+}
+
+model AuditLog {
+  id        String      @id @default(cuid())
+  userId    String?
+  action    AuditAction
+  ipAddress String?
+  userAgent String?
+  metadata  Json?
+  createdAt DateTime    @default(now())
+  user      User?       @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([action])
+  @@index([createdAt])
+}

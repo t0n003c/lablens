@@ -1,0 +1,54 @@
+{
+  "name": "LabLens",
+  "short_name": "LabLens",
+  "description": "Private lab report summaries for self-hosted health tracking.",
+  "id": "/",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone", "browser"],
+  "orientation": "portrait",
+  "background_color": "#f8faf9",
+  "theme_color": "#0f766e",
+  "categories": ["health", "productivity", "utilities"],
+  "icons": [
+    {
+      "src": "/icons/lablens-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/lablens-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/lablens-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/lablens-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Upload report",
+      "short_name": "Upload",
+      "url": "/upload",
+      "icons": [{ "src": "/icons/lablens-icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Add result",
+      "short_name": "Add result",
+      "url": "/manual",
+      "icons": [{ "src": "/icons/lablens-icon-192.png", "sizes": "192x192" }]
+    }
+  ]
+}
