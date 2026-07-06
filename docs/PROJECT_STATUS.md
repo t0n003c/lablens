@@ -24,6 +24,7 @@ Last updated: 2026-07-06
 - Moved people management out of Settings into its own left-navigation People tab.
 - Added PWA install support with manifest, phone icons, service worker registration, and a mobile install prompt. The service worker avoids caching health data.
 - Added image-based NAS deployment support through `docker-compose.image.yml` and a GitHub Container Registry workflow that publishes `ghcr.io/t0n003c/lablens:latest`.
+- Made the container healthcheck NAS-friendly by checking multiple local app addresses before reporting the app unhealthy.
 - Added editable PDF review/finalize flow so users can correct extracted rows, skip untrusted rows, and regenerate summaries before relying on the report.
 - Added saved next-step habits from recommendations, with active/done/remove controls on the dashboard and export/delete coverage.
 - Updated Settings deletion to return users to the dashboard after data removal so the cleared state is visible immediately.
