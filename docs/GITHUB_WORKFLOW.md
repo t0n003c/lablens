@@ -17,6 +17,7 @@ It checks:
 
 - `npm run test`
 - `npm run lint`
+- `npm run db:generate`
 - `npm run build`
 - `npx prisma validate`
 - `docker compose config --quiet`

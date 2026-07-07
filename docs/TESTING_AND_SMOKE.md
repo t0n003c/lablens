@@ -18,8 +18,9 @@ docker compose -f docker-compose.image.yml config --quiet
 
 Use `SMOKE_BASE_URL=http://localhost:3010 npm run smoke` for broad app, auth, upload, settings, People, reports, and action-plan changes.
 
-GitHub CI now runs test, lint, build, Prisma validation, Compose validation, and a
-Docker build on pull requests and `main` pushes. NAS image publishing is manual.
+GitHub CI now runs test, lint, Prisma client generation, build, Prisma validation,
+Compose validation, and a Docker build on pull requests and `main` pushes. NAS
+image publishing is manual.
 
 ## Unit Tests
 
