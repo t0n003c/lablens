@@ -1,18 +1,37 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f8faf9;
-  --foreground: #111827;
+  color-scheme: light;
+  --background: #f6f8f7;
+  --foreground: #111817;
   --panel: #ffffff;
-  --panel-muted: #eef6f4;
-  --border: #d7e2df;
-  --muted: #64716f;
-  --primary: #0f766e;
-  --primary-strong: #115e59;
-  --accent: #7c3aed;
-  --warning: #b45309;
-  --danger: #be123c;
-  --success: #15803d;
+  --panel-muted: #edf4f2;
+  --surface-glass: rgb(255 255 255 / 0.72);
+  --surface-instrument: #071716;
+  --surface-raised: #fbfdfc;
+  --surface-chart: #061110;
+  --border: #d8e2df;
+  --border-soft: rgb(216 226 223 / 0.72);
+  --border-strong: #aabcb7;
+  --muted: #60706c;
+  --primary: #08776f;
+  --primary-strong: #065f59;
+  --accent: #6d5dfc;
+  --warning: #b35b00;
+  --danger: #c92d4f;
+  --success: #16835c;
+  --ring: #73d5c9;
+  --chart-total-cholesterol: #08776f;
+  --chart-hdl: #16835c;
+  --chart-triglycerides: #b35b00;
+  --chart-a1c: #6d5dfc;
+  --chart-vitamin-d: #c92d4f;
+  --score-good: #16835c;
+  --score-review: #b35b00;
+  --score-careful: #c92d4f;
+  --shadow-card: 0 1px 2px rgb(17 24 23 / 0.04), 0 12px 32px rgb(17 24 23 / 0.05);
+  --shadow-glass: 0 1px 2px rgb(17 24 23 / 0.05), 0 20px 60px rgb(8 119 111 / 0.11);
+  --shadow-instrument: 0 18px 46px rgb(2 6 5 / 0.24), inset 0 1px 0 rgb(255 255 255 / 0.08);
   --radius: 8px;
 }
 
@@ -21,7 +40,13 @@
   --color-foreground: var(--foreground);
   --color-panel: var(--panel);
   --color-panel-muted: var(--panel-muted);
+  --color-surface-glass: var(--surface-glass);
+  --color-surface-instrument: var(--surface-instrument);
+  --color-surface-raised: var(--surface-raised);
+  --color-surface-chart: var(--surface-chart);
   --color-border: var(--border);
+  --color-border-soft: var(--border-soft);
+  --color-border-strong: var(--border-strong);
   --color-muted: var(--muted);
   --color-primary: var(--primary);
   --color-primary-strong: var(--primary-strong);
@@ -29,25 +54,116 @@
   --color-warning: var(--warning);
   --color-danger: var(--danger);
   --color-success: var(--success);
+  --color-ring: var(--ring);
+  --color-score-good: var(--score-good);
+  --color-score-review: var(--score-review);
+  --color-score-careful: var(--score-careful);
   --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0c1110;
-    --foreground: #eff6f4;
-    --panel: #141b1a;
-    --panel-muted: #162422;
-    --border: #263533;
-    --muted: #9fb2ae;
-    --primary: #2dd4bf;
-    --primary-strong: #5eead4;
-    --accent: #a78bfa;
-    --warning: #f59e0b;
-    --danger: #fb7185;
-    --success: #4ade80;
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --background: #020605;
+    --foreground: #eef8f5;
+    --panel: #0b1211;
+    --panel-muted: #111d1b;
+    --surface-glass: rgb(11 18 17 / 0.72);
+    --surface-instrument: #030807;
+    --surface-raised: #0f1816;
+    --surface-chart: #020605;
+    --border: #223331;
+    --border-soft: rgb(71 96 91 / 0.44);
+    --border-strong: #405b56;
+    --muted: #9db2ad;
+    --primary: #3ddac7;
+    --primary-strong: #86fff0;
+    --accent: #a99cff;
+    --warning: #ffb84d;
+    --danger: #ff7088;
+    --success: #59d996;
+    --ring: #3ddac7;
+    --chart-total-cholesterol: #3ddac7;
+    --chart-hdl: #59d996;
+    --chart-triglycerides: #ffb84d;
+    --chart-a1c: #a99cff;
+    --chart-vitamin-d: #ff7088;
+    --score-good: #59d996;
+    --score-review: #ffb84d;
+    --score-careful: #ff7088;
+    --shadow-card: 0 1px 2px rgb(0 0 0 / 0.35), 0 18px 44px rgb(0 0 0 / 0.26);
+    --shadow-glass: 0 1px 2px rgb(0 0 0 / 0.42), 0 22px 66px rgb(0 0 0 / 0.34);
+    --shadow-instrument: 0 24px 74px rgb(0 0 0 / 0.42), inset 0 1px 0 rgb(255 255 255 / 0.08);
   }
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+  --background: #f6f8f7;
+  --foreground: #111817;
+  --panel: #ffffff;
+  --panel-muted: #edf4f2;
+  --surface-glass: rgb(255 255 255 / 0.72);
+  --surface-instrument: #071716;
+  --surface-raised: #fbfdfc;
+  --surface-chart: #061110;
+  --border: #d8e2df;
+  --border-soft: rgb(216 226 223 / 0.72);
+  --border-strong: #aabcb7;
+  --muted: #60706c;
+  --primary: #08776f;
+  --primary-strong: #065f59;
+  --accent: #6d5dfc;
+  --warning: #b35b00;
+  --danger: #c92d4f;
+  --success: #16835c;
+  --ring: #73d5c9;
+  --chart-total-cholesterol: #08776f;
+  --chart-hdl: #16835c;
+  --chart-triglycerides: #b35b00;
+  --chart-a1c: #6d5dfc;
+  --chart-vitamin-d: #c92d4f;
+  --score-good: #16835c;
+  --score-review: #b35b00;
+  --score-careful: #c92d4f;
+  --shadow-card: 0 1px 2px rgb(17 24 23 / 0.04), 0 12px 32px rgb(17 24 23 / 0.05);
+  --shadow-glass: 0 1px 2px rgb(17 24 23 / 0.05), 0 20px 60px rgb(8 119 111 / 0.11);
+  --shadow-instrument: 0 18px 46px rgb(2 6 5 / 0.24), inset 0 1px 0 rgb(255 255 255 / 0.08);
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --background: #020605;
+  --foreground: #eef8f5;
+  --panel: #0b1211;
+  --panel-muted: #111d1b;
+  --surface-glass: rgb(11 18 17 / 0.72);
+  --surface-instrument: #030807;
+  --surface-raised: #0f1816;
+  --surface-chart: #020605;
+  --border: #223331;
+  --border-soft: rgb(71 96 91 / 0.44);
+  --border-strong: #405b56;
+  --muted: #9db2ad;
+  --primary: #3ddac7;
+  --primary-strong: #86fff0;
+  --accent: #a99cff;
+  --warning: #ffb84d;
+  --danger: #ff7088;
+  --success: #59d996;
+  --ring: #3ddac7;
+  --chart-total-cholesterol: #3ddac7;
+  --chart-hdl: #59d996;
+  --chart-triglycerides: #ffb84d;
+  --chart-a1c: #a99cff;
+  --chart-vitamin-d: #ff7088;
+  --score-good: #59d996;
+  --score-review: #ffb84d;
+  --score-careful: #ff7088;
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.35), 0 18px 44px rgb(0 0 0 / 0.26);
+  --shadow-glass: 0 1px 2px rgb(0 0 0 / 0.42), 0 22px 66px rgb(0 0 0 / 0.34);
+  --shadow-instrument: 0 24px 74px rgb(0 0 0 / 0.42), inset 0 1px 0 rgb(255 255 255 / 0.08);
 }
 
 * {
@@ -58,6 +174,28 @@ body {
   background: var(--background);
   color: var(--foreground);
   min-width: 320px;
+  overflow-x: hidden;
+  font-feature-settings: "ss01" on, "cv05" on;
+  text-rendering: optimizeLegibility;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--panel) 52%, transparent), transparent 34rem),
+    linear-gradient(115deg, color-mix(in srgb, var(--primary) 8%, transparent), transparent 26rem);
+}
+
+html {
+  overflow-x: hidden;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--primary) 24%, transparent);
 }
 
 button,
@@ -65,6 +203,16 @@ input,
 select,
 textarea {
   font: inherit;
+}
+
+input,
+select,
+textarea {
+  color: var(--foreground);
+}
+
+table {
+  border-color: var(--border);
 }
 
 button:not(:disabled),
@@ -100,6 +248,17 @@ a:focus-visible,
 input:focus-visible,
 select:focus-visible,
 textarea:focus-visible {
-  outline: 3px solid color-mix(in srgb, var(--primary) 45%, transparent);
+  outline: 3px solid color-mix(in srgb, var(--ring) 55%, transparent);
   outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.001ms !important;
+  }
 }

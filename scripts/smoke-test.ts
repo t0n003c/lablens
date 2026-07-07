@@ -176,6 +176,14 @@ async function main() {
     assert((me.user as JsonValue)?.email === tempEmail, "current user mismatch");
     log("session lookup");
 
+    await expectStatus("/api/settings", 403, {
+      method: "PATCH",
+      jar: authed,
+      headers: { "Content-Type": "application/json", Origin: "https://evil.example" },
+      body: JSON.stringify({ theme: "light" }),
+    });
+    log("cross-origin mutation protection");
+
     const settings = await json(await expectStatus("/api/settings", 200, { jar: authed }));
     assert(settings.settings, "settings missing");
     await expectStatus("/api/settings", 200, {

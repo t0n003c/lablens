@@ -71,7 +71,7 @@ export function ManualEntryForm() {
   }
 
   return (
-    <form onSubmit={submit} className="grid gap-4 rounded-md border border-border bg-panel p-5">
+    <form onSubmit={submit} className="grid gap-4 rounded-md border border-border bg-panel p-5 shadow-[var(--shadow-card)]">
       <div className="grid gap-4 md:grid-cols-[1fr_1fr]">
         <label className="grid gap-2 text-sm font-medium">
           Person
@@ -153,10 +153,10 @@ export function ManualEntryForm() {
           <p>{status}</p>
           {status.toLowerCase().includes("authentication") ? (
             <div className="mt-3 flex flex-wrap gap-2">
-              <Link href="/login" className="rounded-md bg-primary px-3 py-2 text-sm font-semibold text-white dark:text-[#06201d]">
+              <Link href="/login" className="rounded-md bg-primary px-3 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-primary-strong dark:text-[#02110f]">
                 Login
               </Link>
-              <Link href="/register" className="rounded-md border border-border px-3 py-2 text-sm font-semibold">
+              <Link href="/register" className="rounded-md border border-border bg-panel px-3 py-2 text-sm font-semibold transition hover:border-primary/50 hover:bg-panel-muted">
                 Create account
               </Link>
             </div>
@@ -166,7 +166,7 @@ export function ManualEntryForm() {
       <button
         type="submit"
         disabled={pending}
-        className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md bg-primary px-4 font-semibold text-white disabled:opacity-60 dark:text-[#06201d]"
+        className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md bg-primary px-4 font-semibold text-white shadow-sm transition hover:bg-primary-strong disabled:opacity-60 dark:text-[#02110f]"
       >
         {pending ? <Loader2 className="size-4 animate-spin" aria-hidden="true" /> : <Save className="size-4" aria-hidden="true" />}
         Save report

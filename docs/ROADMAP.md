@@ -1,6 +1,6 @@
 # Roadmap
 
-## Version 1
+## Version 1.0.0 - Current Stable
 
 - Authenticated single-user/self-hosted experience.
 - PDF upload with draft review.
@@ -14,6 +14,16 @@
 - Biometric login as a second step after password.
 - Phone-installable PWA support.
 - Docker Compose deployment.
+
+## Version 1.1+
+
+- Hold future updates locally until release approval.
+- Expand local smoke coverage before the next GitHub push.
+- Complete and verify the post-1.0 mood-board aligned UI refactor locally before any GitHub push or Docker image publish.
+- Finish the secondary mood-board refactors for Reports, People, Settings, and the upload/review workflow.
+- Run visual smoke checks for the new health-score hero, trend instrument, light mode, OLED dark mode, desktop, tablet, and mobile layouts.
+- Add Playwright visual smoke coverage for desktop, tablet, and mobile layouts.
+- Add real backend-supported settings for password change, named passkeys/devices, autolock, and session management before exposing those controls in the UI.
 
 ## Version 2
 

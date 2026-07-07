@@ -1,5 +1,23 @@
 # Testing And Smoke Plan
 
+Current stable release: `1.0.0`
+
+## Release Gate
+
+Future updates should stay local until these checks pass and the user explicitly approves a GitHub push or image publish.
+
+Minimum local release checks:
+
+```bash
+npm run test
+npm run lint
+npm run build
+docker compose config --quiet
+docker compose -f docker-compose.image.yml config --quiet
+```
+
+Use `SMOKE_BASE_URL=http://localhost:3010 npm run smoke` for broad app, auth, upload, settings, People, reports, and action-plan changes.
+
 ## Unit Tests
 
 Current focused tests:
@@ -19,6 +37,24 @@ Run:
 npm run test
 ```
 
+## Latest Local UI Refresh Verification
+
+Date: 2026-07-06
+
+Completed locally for the post-1.0 UI refresh:
+
+- `npm run lint` passed.
+- `npm run test` passed: 5 files, 32 tests.
+- `npm run build` passed with Next.js 16.2.10.
+- Browser smoke passed at `http://127.0.0.1:3010`.
+- Desktop dashboard verified: Health score is visible, chart zoom controls are present, `Start here this week` is not shown, and no horizontal overflow.
+- Mobile smoke verified at 390 x 844 for Upload, Reports, and Login with no horizontal overflow.
+- Browser console showed no errors during the final smoke pass.
+- Additional continuation: Settings now exposes System, Light, and OLED Dark appearance choices backed by the existing settings API and local early-load theme application.
+- Browser theme check passed: OLED Dark sets `data-theme="dark"`, Light sets `data-theme="light"`, System removes the override, selected buttons update `aria-pressed`, and no console errors were reported.
+- Final UI continuation check passed: active desktop/mobile navigation uses `aria-current`, Settings shows Appearance, Runtime protection, and Intelligence sections, the dead Turnstile button is gone, desktop Settings/Reports and mobile People have no horizontal overflow, and no browser console errors were reported.
+- Mood-board visual alignment check passed: generated glass/lab illustration now renders on Dashboard, Upload, Auth, and sidebar trust surfaces; desktop and mobile checks for Dashboard, Upload, Login, and Settings report no horizontal overflow and no console errors.
+
 ## Smoke Tests
 
 The smoke script uses a temporary account and cleans it up after the run. It checks:
@@ -27,6 +63,7 @@ The smoke script uses a temporary account and cleans it up after the run. It che
 - PWA install assets: manifest, service worker, offline page, and phone icons.
 - Health endpoint with clean `ok` status.
 - Unauthenticated protections.
+- Cross-origin mutation protection for authenticated API writes.
 - Account registration, session lookup, logout, and login.
 - 2FA setup, verification, and login enforcement.
 - Biometric setup options, protected biometric endpoints, and password-plus-2FA login pausing for biometric verification when enabled.
@@ -100,3 +137,19 @@ SMOKE_BASE_URL=http://localhost:3000 npm run smoke
 - Confirm reverse proxy body-size limits.
 - Confirm database backups and restore procedure.
 - Review audit log entries for auth, upload, export, delete, and settings changes.
+
+## Latest Security Audit
+
+Date: 2026-07-07
+
+Completed locally before GitHub push:
+
+- `npm run lint` passed.
+- `npm run test` passed: 5 files, 32 tests.
+- `npm run build` passed with Next.js 16.2.10 and the new API proxy guard.
+- `npm audit --audit-level=moderate` reported 0 vulnerabilities.
+- `npx prisma validate` passed.
+- `docker compose -f docker-compose.yml config` passed.
+- `docker compose -f docker-compose.image.yml config` passed with a placeholder `POSTGRES_PASSWORD`.
+- `SMOKE_BASE_URL=http://127.0.0.1:3010 npm run smoke` passed end to end, including cross-origin mutation blocking.
+- `.env` is ignored and not tracked.

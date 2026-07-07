@@ -38,9 +38,9 @@ export function RecoveryPanel() {
       <form onSubmit={requestRecovery} className="grid gap-3">
         <label className="grid gap-2 text-sm font-medium">
           Account email
-          <input value={email} onChange={(event) => setEmail(event.target.value)} type="email" required className="min-h-11 rounded-md border border-border bg-panel px-3" />
+          <input value={email} onChange={(event) => setEmail(event.target.value)} type="email" autoComplete="email" required className="min-h-11 rounded-md border border-border bg-background px-3 shadow-sm" />
         </label>
-        <button type="submit" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md bg-primary px-4 font-semibold text-white dark:text-[#06201d]">
+        <button type="submit" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md bg-primary px-4 font-semibold text-white shadow-sm transition hover:bg-primary-strong dark:text-[#02110f]">
           <Send className="size-4" aria-hidden="true" />
           Create recovery token
         </button>
@@ -49,13 +49,13 @@ export function RecoveryPanel() {
       <form onSubmit={resetPassword} className="grid gap-3 border-t border-border pt-5">
         <label className="grid gap-2 text-sm font-medium">
           Recovery token
-          <textarea value={token} onChange={(event) => setToken(event.target.value)} required rows={3} className="rounded-md border border-border bg-panel px-3 py-2" />
+          <textarea value={token} onChange={(event) => setToken(event.target.value)} required rows={3} className="rounded-md border border-border bg-background px-3 py-2 shadow-sm" />
         </label>
         <label className="grid gap-2 text-sm font-medium">
           New password
-          <input value={password} onChange={(event) => setPassword(event.target.value)} type="password" minLength={12} required className="min-h-11 rounded-md border border-border bg-panel px-3" />
+          <input value={password} onChange={(event) => setPassword(event.target.value)} type="password" autoComplete="new-password" minLength={12} required className="min-h-11 rounded-md border border-border bg-background px-3 shadow-sm" />
         </label>
-        <button type="submit" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-border px-4 font-semibold">
+        <button type="submit" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-border bg-panel px-4 font-semibold transition hover:border-primary/50 hover:bg-panel-muted">
           <KeyRound className="size-4" aria-hidden="true" />
           Reset password
         </button>

@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>LabLens 1.0 UI Prototype</title>
+    <style>
+      :root {
+        --bg: #f6f8f7;
+        --fg: #111817;
+        --panel: #ffffff;
+        --muted: #60706c;
+        --border: #d8e2df;
+        --primary: #08776f;
+        --success: #16835c;
+        --warning: #b35b00;
+        --danger: #c92d4f;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--fg);
+        font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+      a { color: inherit; text-decoration: none; }
+      .shell { display: grid; min-height: 100vh; grid-template-columns: 260px 1fr; }
+      aside { border-right: 1px solid var(--border); background: var(--panel); padding: 24px; }
+      nav { display: grid; gap: 8px; margin-top: 32px; }
+      nav a, .button {
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 10px 12px;
+        font-weight: 700;
+        background: var(--panel);
+      }
+      nav a:hover, .button:hover { border-color: var(--primary); transform: translateY(-1px); }
+      main { padding: 32px; }
+      .screen { display: none; max-width: 1120px; margin: 0 auto; }
+      .screen:target { display: grid; gap: 24px; }
+      body:not(:has(:target)) #login { display: grid; gap: 24px; }
+      .hero, .card, .grid-card {
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        background: var(--panel);
+        padding: 24px;
+      }
+      .hero { display: grid; gap: 20px; grid-template-columns: 1.2fr .8fr; align-items: center; }
+      .eyebrow { color: var(--primary); font-size: 12px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+      h1 { margin: 8px 0; font-size: clamp(2rem, 5vw, 3.5rem); line-height: 1; }
+      h2 { margin: 0 0 8px; }
+      p { color: var(--muted); line-height: 1.65; }
+      .buttons { display: flex; flex-wrap: wrap; gap: 12px; }
+      .primary { background: var(--primary); color: white; border-color: var(--primary); }
+      .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+      .panel-grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: 16px; }
+      .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+      .pill { display: inline-flex; border-radius: 999px; background: #edf4f2; padding: 4px 8px; color: var(--primary); font-size: 12px; font-weight: 800; }
+      .chart { height: 220px; border-radius: 10px; background: linear-gradient(#ffffff, #f8fbfa); border: 1px solid var(--border); position: relative; overflow: hidden; }
+      .chart svg { width: 100%; height: 100%; }
+      .rows { display: grid; gap: 8px; }
+      .row { display: grid; grid-template-columns: 1fr auto; gap: 12px; border-top: 1px solid var(--border); padding-top: 12px; }
+      @media (prefers-color-scheme: dark) {
+        :root { --bg: #020605; --fg: #eef8f5; --panel: #0b1211; --muted: #9db2ad; --border: #223331; --primary: #3ddac7; }
+        .primary { color: #02110f; }
+        .chart { background: #07100f; }
+        .pill { background: #111d1b; }
+      }
+      @media (max-width: 900px) {
+        .shell { grid-template-columns: 1fr; }
+        aside { position: sticky; top: 0; z-index: 2; }
+        nav { grid-template-columns: repeat(4, 1fr); margin-top: 16px; }
+        main { padding: 20px; }
+        .hero, .panel-grid { grid-template-columns: 1fr; }
+        .stats, .steps { grid-template-columns: repeat(2, 1fr); }
+      }
+      @media (max-width: 560px) {
+        nav { grid-template-columns: repeat(2, 1fr); }
+        .stats, .steps { grid-template-columns: 1fr; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="shell">
+      <aside>
+        <strong>LabLens</strong>
+        <p>Private labs</p>
+        <nav aria-label="Prototype navigation">
+          <a href="#login">Login</a>
+          <a href="#upload">Upload</a>
+          <a href="#processing">Processing</a>
+          <a href="#review">Review</a>
+          <a href="#dashboard">Dashboard</a>
+          <a href="#reports">Reports</a>
+          <a href="#people">People</a>
+          <a href="#settings">Settings</a>
+        </nav>
+      </aside>
+      <main>
+        <section id="login" class="screen">
+          <div class="hero">
+            <div>
+              <div class="eyebrow">Private health records</div>
+              <h1>Understand your lab reports without the noise.</h1>
+              <p>Self-hosted sign in, optional 2FA, and biometric second step after password.</p>
+              <div class="buttons"><a class="button primary" href="#upload">Login</a><a class="button" href="#upload">Create account</a></div>
+            </div>
+            <div class="card"><img src="../../../public/illustrations/lablens-report-lens.png" alt="" style="width:100%;border-radius:10px" /></div>
+          </div>
+        </section>
+        <section id="upload" class="screen">
+          <div class="hero"><div><div class="eyebrow">PDF intake</div><h1>Upload one report.</h1><p>Choose a person, attach a PDF, then review the extracted rows before saving.</p><div class="buttons"><a class="button primary" href="#processing">Extract results</a></div></div><div class="card">Drop zone<br /><br />Person selector<br />Raw PDF setting</div></div>
+        </section>
+        <section id="processing" class="screen">
+          <div class="card"><span class="pill">Processing</span><h1>Reading PDF...</h1><p>Parser warnings and editable rows appear before anything is finalized.</p><div class="buttons"><a class="button primary" href="#review">Continue to review</a></div></div>
+        </section>
+        <section id="review" class="screen">
+          <div class="card"><span class="pill">Review draft</span><h1>Confirm extracted values.</h1><div class="rows"><div class="row"><span>Total cholesterol</span><strong>179 mg/dL</strong></div><div class="row"><span>HDL cholesterol</span><strong>42 mg/dL</strong></div><div class="row"><span>A1c</span><strong>5.7%</strong></div></div><div class="buttons" style="margin-top:20px"><a class="button" href="#upload">Add row</a><a class="button" href="#reports">Save review</a><a class="button primary" href="#dashboard">Finalize report</a></div></div>
+        </section>
+        <section id="dashboard" class="screen">
+          <div class="hero"><div><div class="eyebrow">Health snapshot</div><h1>Snapshot score 82</h1><p>Good coverage, two values worth reviewing, and four trend lines matched across reports.</p></div><div class="stats"><div class="grid-card">Saved values<br /><strong>48</strong></div><div class="grid-card">Needs review<br /><strong>2</strong></div><div class="grid-card">Reports<br /><strong>4</strong></div><div class="grid-card">Raw PDF<br /><strong>Off</strong></div></div></div>
+          <div class="steps"><div class="grid-card"><span class="pill">Food</span><p>Add salmon, eggs, or fortified milk.</p></div><div class="grid-card"><span class="pill">Movement</span><p>Take a short walk after lunch or dinner.</p></div><div class="grid-card"><span class="pill">Routine</span><p>Drink water before your next fasting lab.</p></div><div class="grid-card"><span class="pill">Sleep</span><p>Keep the same sleep window before labs.</p></div></div>
+          <div class="panel-grid"><div class="card"><h2>Trends</h2><div class="chart"><svg viewBox="0 0 600 220" role="img" aria-label="Prototype trend chart"><polyline fill="none" stroke="var(--primary)" stroke-width="5" points="20,160 120,120 220,140 320,80 440,96 560,60"/></svg></div></div><div class="card"><h2>What HDL shows</h2><p>HDL is a little lower than ideal on this report. Regular movement and fewer sweet drinks may help, but review the full heart-risk picture with your clinician.</p></div></div>
+        </section>
+        <section id="reports" class="screen"><div class="card"><h1>Reports</h1><p>Search by person, lab, date, or marker. Delete saved reports when needed.</p><div class="buttons"><a class="button primary" href="#dashboard">Open dashboard</a></div></div></section>
+        <section id="people" class="screen"><div class="card"><h1>People</h1><p>Keep reports and recommendation context separate for each person in the account.</p><div class="buttons"><a class="button primary" href="#dashboard">Use selected person</a></div></div></section>
+        <section id="settings" class="screen"><div class="card"><h1>Settings</h1><p>Manage 2FA, biometric login, raw PDF storage, export, and account data deletion.</p><div class="buttons"><a class="button" href="#login">Log out</a><a class="button primary" href="#dashboard">Done</a></div></div></section>
+      </main>
+    </div>
+  </body>
+</html>

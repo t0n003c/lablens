@@ -194,9 +194,9 @@ export function PeoplePanel() {
 
   return (
     <div className="grid gap-4">
-      {message ? <p className="rounded-md border border-border bg-panel p-3 text-sm text-muted">{message}</p> : null}
+      {message ? <p className="rounded-md border border-border bg-panel p-3 text-sm text-muted shadow-[var(--shadow-card)]">{message}</p> : null}
 
-      <section className="rounded-md border border-border bg-panel p-5">
+      <section className="rounded-md border border-border bg-panel p-5 shadow-[var(--shadow-card)]">
         <div className="flex items-start gap-3">
           <UserRound className="mt-1 size-5 text-primary" aria-hidden="true" />
           <div className="w-full">
@@ -225,11 +225,11 @@ export function PeoplePanel() {
                 </select>
               </label>
               <div className="flex flex-wrap items-end gap-2">
-                <button onClick={makeDefaultPerson} className="inline-flex min-h-11 items-center gap-2 rounded-md border border-border px-3 font-medium" type="button">
+                <button onClick={makeDefaultPerson} className="inline-flex min-h-11 items-center gap-2 rounded-md border border-border bg-panel px-3 font-medium transition hover:border-primary/50 hover:bg-panel-muted" type="button">
                   <CheckCircle2 className="size-4" aria-hidden="true" />
                   Make default
                 </button>
-                <button onClick={deletePerson} className="inline-flex min-h-11 items-center gap-2 rounded-md border border-danger/40 px-3 font-medium text-danger" type="button">
+                <button onClick={deletePerson} className="inline-flex min-h-11 items-center gap-2 rounded-md border border-danger/40 bg-panel px-3 font-medium text-danger transition hover:bg-danger/10" type="button">
                   <Trash2 className="size-4" aria-hidden="true" />
                   Delete person
                 </button>
@@ -245,7 +245,7 @@ export function PeoplePanel() {
                   className="min-h-11 rounded-md border border-border bg-background px-3"
                 />
               </label>
-              <button onClick={addPerson} className="inline-flex min-h-11 items-center justify-center gap-2 self-end rounded-md border border-border px-3 font-medium" type="button">
+              <button onClick={addPerson} className="inline-flex min-h-11 items-center justify-center gap-2 self-end rounded-md border border-border bg-panel px-3 font-medium transition hover:border-primary/50 hover:bg-panel-muted" type="button">
                 <Plus className="size-4" aria-hidden="true" />
                 Add person
               </button>
@@ -320,7 +320,7 @@ export function PeoplePanel() {
                 className="rounded-md border border-border bg-background px-3 py-2"
               />
             </label>
-            <button onClick={saveProfile} className="mt-4 inline-flex min-h-10 items-center gap-2 rounded-md bg-primary px-3 font-semibold text-white dark:text-[#06201d]" type="button">
+            <button onClick={saveProfile} className="mt-4 inline-flex min-h-10 items-center gap-2 rounded-md bg-primary px-3 font-semibold text-white shadow-sm transition hover:bg-primary-strong dark:text-[#02110f]" type="button">
               <Save className="size-4" aria-hidden="true" />
               Save profile
             </button>

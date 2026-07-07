@@ -1,5 +1,7 @@
 # Product Spec
 
+Release: `1.0.0`
+
 ## Product Concept
 
 LabLens helps a self-hosting user upload or manually enter lab results, review extracted values, understand range-based flags, and generate cautious wellness-oriented summaries.
@@ -16,9 +18,12 @@ LabLens helps a self-hosting user upload or manually enter lab results, review e
 - Optional person-specific profile context in People so recommendations can fit age, gender, country/region, cultural background or ethnicity, work, hobbies, and daily routine without changing medical thresholds.
 - Short `My next steps` actions generated from report-based recommendations.
 - Prioritized `My next steps` cards with why-this-step notes, frequency, effort, marker tags, and replacement actions.
-- Dashboard cards, trend charts, recent results, flags, and shortcuts.
+- Dashboard health score, cards, trend charts, recent results, flags, and shortcuts.
+- Premium post-1.0 UI refresh direction with documented light/OLED palettes, System/Light/OLED Dark appearance control, responsive layouts, clickable prototype, generated illustration asset, and shadcn-style Tailwind primitives.
+- Mood-board visual identity applied to real product surfaces through glass/lens report imagery, private-by-design cards, and stronger health-score hierarchy.
 - Report history with search, person filters, and future compare/export workflows.
 - People tab for report profiles; Settings for security, 2FA, Turnstile, AI provider, data export/deletion, and theme.
+- Active navigation state on desktop and mobile.
 - Phone-installable PWA shell with home-screen icons and a mobile install prompt.
 
 ## User Flows
@@ -45,7 +50,7 @@ LabLens helps a self-hosting user upload or manually enter lab results, review e
 ### Action Plan Flow
 
 1. Dashboard turns report-based recommendations into short grouped next steps.
-2. Dashboard highlights the top three steps to start with this week.
+2. Dashboard highlights the top three steps in `Start here`.
 3. Each step shows why it was chosen, how often to try it, expected effort, and linked marker tags.
 4. User can mark steps done, replace a step with an easier option, or delete steps they do not want to see.
 5. User can use Reset to restore deleted steps from the current report.
@@ -73,6 +78,7 @@ LabLens helps a self-hosting user upload or manually enter lab results, review e
 3. User can enable biometric login from Settings on a supported secure browser.
 4. If biometric login is on, the login screen accepts email/password first, then asks for Face ID, fingerprint, device PIN, or the platform biometric prompt before creating a session.
 5. Login, upload, settings, delete, and export events are audit logged.
+6. Server-configured protections such as Turnstile are shown as status, not as inactive buttons.
 
 ### Phone Install Flow
 
@@ -88,3 +94,4 @@ LabLens helps a self-hosting user upload or manually enter lab results, review e
 - Local AI should be preferred for highly sensitive reports.
 - Docker backups must include both database volume and upload volume if raw PDF storage is enabled.
 - HIPAA-like operation requires host-level policies, not just application code.
+- Future product updates should be tested locally and held until explicit approval to push or publish.

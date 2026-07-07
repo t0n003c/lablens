@@ -8,8 +8,8 @@
   "display": "standalone",
   "display_override": ["window-controls-overlay", "standalone", "browser"],
   "orientation": "portrait",
-  "background_color": "#f8faf9",
-  "theme_color": "#0f766e",
+  "background_color": "#f6f8f7",
+  "theme_color": "#08776f",
   "categories": ["health", "productivity", "utilities"],
   "icons": [
     {

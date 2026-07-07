@@ -8,10 +8,14 @@ Concept: a private lens over lab reports. The icon concept is a rounded square w
 
 ## Visual Direction
 
-- Clean, premium, and calm with warm neutral surfaces, teal primary actions, amber caution, rose danger, green success, and violet analytical accents.
+- Clean, premium, and calm with neutral surfaces, teal primary actions, amber caution, rose danger, green success, and violet analytical accents.
 - Cards are used for dashboard metrics and framed workflows only.
 - Desktop uses a persistent sidebar. Mobile uses a bottom navigation bar.
 - Light and dark modes use the same semantic tokens for contrast consistency.
+- The post-1.0 local UI refresh uses a dedicated light palette and OLED-friendly dark palette, backed by semantic CSS tokens.
+- Appearance has three choices: System, Light, and OLED Dark. Account settings store the choice for signed-in users, while local storage applies it early enough to avoid a jarring flash on reload.
+- Image-generated boards are treated as design input, then critiqued before implementation. Any generated social-login controls are excluded unless the backend actually supports them.
+- The generated illustration style is clean lab-report imagery with a glass lens, teal/graphite accents, no text, and no diagnostic claims.
 
 ## UX Principles
 
@@ -54,6 +58,31 @@ Concept: a private lens over lab reports. The icon concept is a rounded square w
 - `My next steps` should not include filler maintenance advice like "keep your current habit steady" or broad planning advice like "pick one or two habits"; each visible step should name one concrete behavior.
 - In `My next steps`, each card should read vertically: step text first, then a wrapping footer row with labels and action buttons. Labels and buttons can share one row when space allows and wrap to a second row in narrow cards.
 - The Sleep, Routine, Food, and Movement cards should stay wide enough for footer labels and action buttons to fit naturally; avoid squeezing all four category cards into one desktop row.
+- Dashboard should lead with a cautious health score. The score is a snapshot of report completeness, range flags, and trend coverage, not a diagnosis or medical grade.
+- Trend charts should offer range and zoom controls plus selected-line emphasis, because users need to explore changes without guessing what each line means.
+- Auth, sign-up, recovery, upload, processing, review, dashboard, reports, people, and settings must share the same visual system so a healthcare app feels consistent and trustworthy.
+- The clickable prototype lives in `docs/design/1.0-ui-refresh/prototype.html`; it is design-review material, while the Next.js app remains the source of truth for real behavior.
+- Primary navigation should show the active page with `aria-current` on desktop and mobile so users do not lose orientation inside dense health data.
+- Desktop account status lives in a compact icon popover beside the LabLens mark. Hovering or clicking it shows signed-in state, name, email, and logout without taking sidebar space away from navigation.
+- Settings should not show disabled controls that look broken. Server-configured features such as Turnstile and AI provider are status panels until user-facing controls exist.
+- Generated boards can inspire future controls, but app UI only ships controls backed by working behavior.
+- The generated glass/lab report illustration is used in functional app contexts, not as loose decoration: auth and upload intake keep the visual trust cue, while the dashboard shell stays focused on usable health data.
+- The mood-board alignment pass prioritizes layout composition and material primitives over incremental card styling. The source of truth for the pass is `docs/design/1.0-ui-refresh/MOODBOARD_ALIGNMENT_PLAN.md` and ADR 0003.
+- Dashboard first viewport uses a composed `HealthScoreHero` instead of a generic card stack. It leads with the cautious health score and a short reason for the score, places `Start here` beside it, and uses three colored status cards for Saved reports, Raw PDF storage, and Needs review.
+- The top Health snapshot header uses the person selector instead of upload/manual actions, because multi-person context changes the whole dashboard and should be visible before reviewing values.
+- In the dashboard hero, `Start here` rows keep the action text on the left and align marker tags/buttons to the right edge so the steps read cleanly at a glance.
+- Mobile dashboard uses its own compact health-score composition instead of relying on the desktop hero to collapse. This makes the phone view closer to the mood board's mobile cards and avoids a long stack before the user sees key values.
+- The dashboard no longer has a separate shortcut rail. The top `Needs review` card is a status shortcut, the detailed `Needs review` section remains the single working flagged-values area, and saved values stay in the lab table.
+- Trend charts use a dark `TrendInstrument` surface in both light and OLED modes because the mood board treated trend review as a focused instrument. The selected-line explanation stays beside the graph so users do not separate the visual movement from the plain-language meaning.
+- The trend instrument now has working Trend, Compare, and Distribution modes. These are backed by the same saved report data and avoid unsupported controls: Trend shows the zoomable line chart, Compare shows first/latest movement by marker, and Distribution shows latest value within the saved range for the selected marker set.
+- Trend chart hover tooltips should describe one marker at one saved date, not every marker on that date, and only that hovered/selected marker should get the active point highlight. The first line/point click should select that marker immediately. Avoid persistent obvious readouts such as Latest update, Matched markers, Chart tools, or Latest point when the chart already communicates that context.
+- The mobile PWA install prompt should stay compact by default. It can ask to install the app, but it should not auto-expand instructions or cover the first health-score card.
+- The expanded generated asset set has distinct jobs: trust/privacy, trend review, upload/review, and general report-lens imagery. Assets are not used as random decoration.
+
+## Release Decisions
+
+- The current app is release `1.0.0`.
+- Future updates should be held locally and tested before asking for approval to push to GitHub or publish a new Docker image.
 
 ## Accessibility
 

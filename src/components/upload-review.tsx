@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { CheckCircle2, FileUp, Loader2, Plus, Save, UserRound } from "lucide-react";
+import { CheckCircle2, ClipboardCheck, FileUp, Loader2, Plus, Save, UserRound } from "lucide-react";
+import { LabLensVisual } from "@/components/lablens-visual";
 import { ResultsTable } from "@/components/results-table";
 import type { HealthSummary, ParsedLabResult } from "@/lib/labs/types";
 
@@ -160,67 +161,100 @@ export function UploadReview() {
 
   return (
     <div className="grid gap-6">
-      <form onSubmit={submit} className="rounded-md border border-border bg-panel p-5">
-        <div className="mb-4 grid gap-4 md:grid-cols-2">
-          <label className="grid gap-3 text-sm font-semibold text-foreground">
-            Person
-            <span className="relative">
-              <UserRound className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted" aria-hidden="true" />
-              <select
-                value={personId}
-                onChange={(event) => setPersonId(event.target.value)}
-                className="min-h-12 w-full rounded-md border border-border bg-background pl-10 pr-3"
-              >
-                {personId ? null : <option value="">Loading people</option>}
-                {people.map((person) => (
-                  <option key={person.id} value={person.id}>
-                    {person.name}
-                    {person.isDefault ? " (default)" : ""}
-                  </option>
-                ))}
-                <option value="new">Add new person</option>
-              </select>
-            </span>
-          </label>
-          {personId === "new" ? (
-            <label className="grid gap-3 text-sm font-semibold text-foreground">
-              New person name
-              <input
-                value={personName}
-                onChange={(event) => setPersonName(event.target.value)}
-                required
-                placeholder="Mom, Dad, Alex"
-                className="min-h-12 rounded-md border border-border bg-background px-3"
-              />
-            </label>
-          ) : null}
+      <form onSubmit={submit} className="rounded-md border border-border bg-panel p-5 shadow-[var(--shadow-card)]">
+        <div className="mb-5 grid gap-3 sm:grid-cols-3">
+          {[
+            ["1", "Extract", "Upload the PDF"],
+            ["2", "Review", "Confirm values"],
+            ["3", "Finalize", "Save to trends"],
+          ].map(([step, title, description]) => (
+            <div key={step} className="rounded-md border border-border bg-panel-muted/80 p-3">
+              <span className="inline-flex size-7 items-center justify-center rounded-md bg-primary text-xs font-semibold text-white dark:text-[#02110f]">{step}</span>
+              <p className="mt-2 text-sm font-semibold text-foreground">{title}</p>
+              <p className="text-xs leading-5 text-muted">{description}</p>
+            </div>
+          ))}
         </div>
-        <label className="grid gap-3 text-sm font-semibold text-foreground">
-          MyQuest PDF
-          <input
-            name="file"
-            type="file"
-            accept="application/pdf,.pdf"
-            required
-            className="block min-h-12 rounded-md border border-border bg-background px-3 py-2 text-sm file:mr-4 file:rounded-md file:border-0 file:bg-primary file:px-3 file:py-2 file:font-semibold file:text-white dark:file:text-[#06201d]"
-          />
-        </label>
-        <button
-          type="submit"
-          disabled={pending}
-          className="mt-4 inline-flex min-h-11 items-center gap-2 rounded-md bg-primary px-4 font-semibold text-white disabled:opacity-60 dark:text-[#06201d]"
-        >
-          {pending ? <Loader2 className="size-4 animate-spin" aria-hidden="true" /> : <FileUp className="size-4" aria-hidden="true" />}
-          Extract results
-        </button>
+        <div className="grid gap-5 lg:grid-cols-[1fr_0.72fr] lg:items-stretch">
+          <div className="grid gap-4">
+            <div className="grid gap-4 md:grid-cols-2">
+              <label className="grid gap-3 text-sm font-semibold text-foreground">
+                Person
+                <span className="relative">
+                  <UserRound className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted" aria-hidden="true" />
+                  <select
+                    value={personId}
+                    onChange={(event) => setPersonId(event.target.value)}
+                    className="min-h-12 w-full rounded-md border border-border bg-background pl-10 pr-3"
+                  >
+                    {personId ? null : <option value="">Loading people</option>}
+                    {people.map((person) => (
+                      <option key={person.id} value={person.id}>
+                        {person.name}
+                        {person.isDefault ? " (default)" : ""}
+                      </option>
+                    ))}
+                    <option value="new">Add new person</option>
+                  </select>
+                </span>
+              </label>
+              {personId === "new" ? (
+                <label className="grid gap-3 text-sm font-semibold text-foreground">
+                  New person name
+                  <input
+                    value={personName}
+                    onChange={(event) => setPersonName(event.target.value)}
+                    required
+                    placeholder="Mom, Dad, Alex"
+                    className="min-h-12 rounded-md border border-border bg-background px-3"
+                  />
+                </label>
+              ) : null}
+            </div>
+            <label className="grid gap-3 text-sm font-semibold text-foreground">
+              MyQuest PDF
+              <span className="rounded-md border border-dashed border-primary/40 bg-primary/5 p-4">
+                <input
+                  name="file"
+                  type="file"
+                  accept="application/pdf,.pdf"
+                  required
+                  className="block min-h-12 w-full rounded-md border border-border bg-background px-3 py-2 text-sm shadow-sm file:mr-4 file:rounded-md file:border-0 file:bg-primary file:px-3 file:py-2 file:font-semibold file:text-white dark:file:text-[#02110f]"
+                />
+                <span className="mt-2 block text-xs leading-5 text-muted">PDF only. Max 20MB. You can review extracted rows before relying on them.</span>
+              </span>
+            </label>
+            <button
+              type="submit"
+              disabled={pending}
+              className="inline-flex min-h-11 w-fit items-center gap-2 rounded-md bg-primary px-4 font-semibold text-white shadow-sm transition hover:bg-primary-strong disabled:opacity-60 dark:text-[#02110f]"
+            >
+              {pending ? <Loader2 className="size-4 animate-spin" aria-hidden="true" /> : <FileUp className="size-4" aria-hidden="true" />}
+              Extract results
+            </button>
+          </div>
+          <LabLensVisual variant="upload" className="min-h-72" description="Extracted values stay private and editable before you finalize." />
+        </div>
       </form>
+
+      {pending ? (
+        <section className="rounded-md border border-primary/30 bg-primary/10 p-5 text-primary shadow-[var(--shadow-card)]">
+          <div className="flex items-start gap-3">
+            <Loader2 className="mt-0.5 size-5 animate-spin" aria-hidden="true" />
+            <div>
+              <h2 className="font-semibold">Processing PDF</h2>
+              <p className="mt-1 text-sm leading-6 text-muted">Reading the report, matching lab rows, and checking supplied reference ranges.</p>
+            </div>
+          </div>
+        </section>
+      ) : null}
 
       {response?.error ? (
         <div className="rounded-md border border-danger/30 bg-danger/10 p-4 text-danger">
           <p>{response.error}</p>
           {response.error.toLowerCase().includes("authentication") ? (
             <div className="mt-3 flex flex-wrap gap-2">
-              <Link href="/login" className="rounded-md bg-primary px-3 py-2 text-sm font-semibold text-white dark:text-[#06201d]">
+              <Link href="/login" className="rounded-md bg-primary px-3 py-2 text-sm font-semibold text-white dark:text-[#02110f]">
                 Login
               </Link>
               <Link href="/register" className="rounded-md border border-danger/30 px-3 py-2 text-sm font-semibold">
@@ -243,7 +277,14 @@ export function UploadReview() {
               {response.report.parserWarnings.join(" ")}
             </div>
           ) : null}
-          <div className="rounded-md border border-border bg-panel p-5">
+          <div className="rounded-md border border-border bg-panel p-5 shadow-[var(--shadow-card)]">
+            <div className="mb-5 flex items-start gap-3 rounded-md border border-success/30 bg-success/10 p-3 text-success">
+              <ClipboardCheck className="mt-0.5 size-5 shrink-0" aria-hidden="true" />
+              <div>
+                <h2 className="font-semibold">Review before saving</h2>
+                <p className="mt-1 text-sm leading-6 text-muted">Edit any row that looks off, uncheck rows you do not want, then finalize the report.</p>
+              </div>
+            </div>
             <div className="grid gap-4 md:grid-cols-3">
               <label className="grid gap-2 text-sm font-medium">
                 Person
@@ -289,7 +330,7 @@ export function UploadReview() {
               />
             </label>
 
-            <div className="mt-5 overflow-x-auto rounded-md border border-border">
+            <div className="mt-5 min-w-0 overflow-x-auto rounded-md border border-border">
               <table className="w-full min-w-[1100px] border-collapse text-left text-sm">
                 <thead className="border-b border-border bg-panel-muted text-xs uppercase tracking-[0.12em] text-muted">
                   <tr>
@@ -347,7 +388,7 @@ export function UploadReview() {
             </div>
 
             <div className="mt-4 flex flex-wrap gap-3">
-              <button type="button" onClick={addRow} className="inline-flex min-h-10 items-center gap-2 rounded-md border border-border px-3 font-medium">
+              <button type="button" onClick={addRow} className="inline-flex min-h-10 items-center gap-2 rounded-md border border-border bg-panel px-3 font-medium transition hover:border-primary/50 hover:bg-panel-muted">
                 <Plus className="size-4" aria-hidden="true" />
                 Add row
               </button>
@@ -355,7 +396,7 @@ export function UploadReview() {
                 type="button"
                 onClick={() => void saveReview("REVIEWED")}
                 disabled={reviewPending}
-                className="inline-flex min-h-10 items-center gap-2 rounded-md border border-border px-3 font-medium disabled:opacity-60"
+                className="inline-flex min-h-10 items-center gap-2 rounded-md border border-border bg-panel px-3 font-medium transition hover:border-primary/50 hover:bg-panel-muted disabled:opacity-60"
               >
                 {reviewPending ? <Loader2 className="size-4 animate-spin" aria-hidden="true" /> : <Save className="size-4" aria-hidden="true" />}
                 Save review
@@ -364,12 +405,12 @@ export function UploadReview() {
                 type="button"
                 onClick={() => void saveReview("FINALIZED")}
                 disabled={reviewPending}
-                className="inline-flex min-h-10 items-center gap-2 rounded-md bg-primary px-3 font-semibold text-white disabled:opacity-60 dark:text-[#06201d]"
+                className="inline-flex min-h-10 items-center gap-2 rounded-md bg-primary px-3 font-semibold text-white shadow-sm transition hover:bg-primary-strong disabled:opacity-60 dark:text-[#02110f]"
               >
                 {reviewPending ? <Loader2 className="size-4 animate-spin" aria-hidden="true" /> : <CheckCircle2 className="size-4" aria-hidden="true" />}
                 Finalize report
               </button>
-              <Link href="/reports" className="inline-flex min-h-10 items-center rounded-md border border-border px-3 font-medium">
+              <Link href="/reports" className="inline-flex min-h-10 items-center rounded-md border border-border bg-panel px-3 font-medium transition hover:border-primary/50 hover:bg-panel-muted">
                 Open reports
               </Link>
             </div>
@@ -378,7 +419,7 @@ export function UploadReview() {
 
           {response.report.labResults.length ? <ResultsTable results={response.report.labResults.map(normalizeResult)} /> : null}
           {response.summary ? (
-            <div className="rounded-md border border-border bg-panel p-5">
+            <div className="rounded-md border border-border bg-panel p-5 shadow-[var(--shadow-card)]">
               <h2 className="text-lg font-semibold">Draft summary</h2>
               <ul className="mt-3 grid gap-2 text-sm leading-6 text-muted">
                 {response.summary.overall.map((item) => (

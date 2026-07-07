@@ -157,7 +157,8 @@ export function ReportsBrowser() {
 
   return (
     <div className="grid gap-6">
-      <form onSubmit={submit} className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <form onSubmit={submit} className="rounded-md border border-border bg-panel p-4 shadow-[var(--shadow-card)]">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="grid gap-3 sm:grid-cols-[16rem_1fr]">
           <label className="relative block">
             <span className="sr-only">Filter by person</span>
@@ -165,7 +166,7 @@ export function ReportsBrowser() {
             <select
               value={selectedPersonId}
               onChange={(event) => changePerson(event.target.value)}
-              className="min-h-11 w-full rounded-md border border-border bg-panel pl-10 pr-3"
+              className="min-h-11 w-full rounded-md border border-border bg-background pl-10 pr-3 shadow-sm"
             >
               <option value="all">All people</option>
               {people.map((person) => (
@@ -183,13 +184,14 @@ export function ReportsBrowser() {
               value={query}
               onChange={(event) => setQuery(event.target.value)}
               placeholder="Search reports"
-              className="min-h-11 w-full rounded-md border border-border bg-panel pl-10 pr-3"
+              className="min-h-11 w-full rounded-md border border-border bg-background pl-10 pr-3 shadow-sm"
             />
           </label>
         </div>
-        <button type="submit" className="inline-flex min-h-11 items-center justify-center rounded-md bg-primary px-4 font-semibold text-white dark:text-[#06201d]">
+        <button type="submit" className="inline-flex min-h-11 items-center justify-center rounded-md bg-primary px-4 font-semibold text-white shadow-sm transition hover:bg-primary-strong dark:text-[#02110f]">
           Search
         </button>
+        </div>
       </form>
 
       {status ? <p className="rounded-md border border-border bg-panel p-4 text-sm text-muted">{status}</p> : null}
@@ -197,7 +199,7 @@ export function ReportsBrowser() {
       {reports.length ? (
         <div className="grid gap-4">
           {reports.map((report) => (
-            <section key={report.id} className="rounded-md border border-border bg-panel p-5">
+            <section key={report.id} className="min-w-0 rounded-md border border-border bg-panel p-5 shadow-[var(--shadow-card)]">
               <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                   <h2 className="text-xl font-semibold">{report.labName ?? "Lab report"}</h2>
@@ -214,14 +216,14 @@ export function ReportsBrowser() {
                     type="button"
                     onClick={() => void deleteReport(report)}
                     disabled={deletingReportId === report.id}
-                    className="inline-flex min-h-9 items-center gap-2 rounded-md border border-danger/40 px-3 text-sm font-semibold text-danger disabled:cursor-not-allowed disabled:opacity-60"
+                    className="inline-flex min-h-9 items-center gap-2 rounded-md border border-danger/40 bg-panel px-3 text-sm font-semibold text-danger transition hover:bg-danger/10 disabled:cursor-not-allowed disabled:opacity-60"
                   >
                     <Trash2 className="size-4" aria-hidden="true" />
                     {deletingReportId === report.id ? "Deleting" : "Delete"}
                   </button>
                 </div>
               </div>
-              <div className="mt-5">
+              <div className="mt-5 min-w-0">
                 {report.labResults.length ? (
                   <ResultsTable results={report.labResults.map(normalizeResult)} />
                 ) : (
@@ -232,7 +234,7 @@ export function ReportsBrowser() {
           ))}
         </div>
       ) : showDemo ? (
-        <section className="rounded-md border border-border bg-panel p-5">
+        <section className="min-w-0 rounded-md border border-border bg-panel p-5 shadow-[var(--shadow-card)]">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <h2 className="text-xl font-semibold">June 2026 Quest Diagnostics</h2>
@@ -240,7 +242,7 @@ export function ReportsBrowser() {
             </div>
             <span className="inline-flex w-fit rounded-md bg-warning/10 px-3 py-1 text-sm font-semibold text-warning">3 flags</span>
           </div>
-          <div className="mt-5">
+          <div className="mt-5 min-w-0">
             <ResultsTable results={demoResults} />
           </div>
         </section>

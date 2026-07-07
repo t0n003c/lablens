@@ -92,7 +92,6 @@ export function PwaInstallPrompt() {
     const fallbackTimer = window.setTimeout(() => {
       if (!isStandaloneMode() && !hasDismissedRecently()) {
         setVisible(true);
-        setShowSteps(isAppleMobile());
       }
     }, 1400);
 
@@ -130,29 +129,29 @@ export function PwaInstallPrompt() {
   if (!visible) return null;
 
   return (
-    <section className="fixed inset-x-3 bottom-20 z-50 rounded-md border border-border bg-panel p-4 shadow-2xl shadow-black/20 sm:left-auto sm:right-4 sm:w-96 lg:bottom-4">
-      <div className="flex items-start gap-3">
-        <div className="grid size-10 shrink-0 place-items-center rounded-md bg-primary text-white dark:text-[#06201d]">
+    <section className="fixed inset-x-3 bottom-20 z-50 rounded-md border border-border-soft bg-surface-glass p-3 shadow-[var(--shadow-glass)] backdrop-blur-xl sm:left-auto sm:right-4 sm:w-96 lg:bottom-4">
+      <div className="flex items-center gap-3">
+        <div className="grid size-10 shrink-0 place-items-center rounded-md bg-primary text-white dark:text-[#02110f]">
           <Smartphone className="size-5" aria-hidden="true" />
         </div>
         <div className="min-w-0 flex-1">
-          <div className="flex items-start justify-between gap-3">
+          <div className="flex items-start justify-between gap-2">
             <div>
-              <h2 className="font-semibold">Install LabLens on this phone?</h2>
-              <p className="mt-1 text-sm leading-6 text-muted">Open it from your home screen like an app.</p>
+              <h2 className="text-sm font-semibold">Install LabLens?</h2>
+              <p className="mt-0.5 text-xs leading-5 text-muted">Open from your home screen.</p>
             </div>
             <button
               type="button"
               onClick={dismiss}
               aria-label="Dismiss install prompt"
-              className="grid size-8 shrink-0 place-items-center rounded-md border border-border text-muted hover:border-primary/60 hover:text-primary"
+              className="grid size-8 shrink-0 place-items-center rounded-md border border-border bg-panel text-muted transition hover:border-primary/60 hover:bg-panel-muted hover:text-primary"
             >
               <X className="size-4" aria-hidden="true" />
             </button>
           </div>
 
-          {showSteps || isApple ? (
-            <p className="mt-3 rounded-md bg-panel-muted p-3 text-sm leading-6 text-muted">
+          {showSteps ? (
+            <p className="mt-3 rounded-md border border-border-soft bg-panel/80 p-3 text-sm leading-6 text-muted">
               {isApple ? (
                 <>
                   On iPhone, tap <Share className="mx-1 inline size-4 align-[-2px]" aria-hidden="true" /> Share, then Add to Home Screen.
@@ -163,16 +162,16 @@ export function PwaInstallPrompt() {
             </p>
           ) : null}
 
-          <div className="mt-4 flex flex-wrap gap-2">
+          <div className="mt-3 grid grid-cols-2 gap-2">
             <button
               type="button"
               onClick={() => void installApp()}
-              className="inline-flex min-h-10 items-center gap-2 rounded-md bg-primary px-3 text-sm font-semibold text-white dark:text-[#06201d]"
+              className="inline-flex min-h-10 items-center justify-center gap-2 rounded-md bg-primary px-3 text-sm font-semibold text-white shadow-sm transition hover:bg-primary-strong dark:text-[#02110f]"
             >
               <Download className="size-4" aria-hidden="true" />
-              {deferredPrompt ? "Install app" : "Show steps"}
+              {deferredPrompt ? "Install" : "How"}
             </button>
-            <button type="button" onClick={dismiss} className="inline-flex min-h-10 items-center rounded-md border border-border px-3 text-sm font-semibold text-muted">
+            <button type="button" onClick={dismiss} className="inline-flex min-h-10 items-center justify-center rounded-md border border-border-soft bg-panel/70 px-3 text-sm font-semibold text-muted transition hover:border-primary/50 hover:bg-panel-muted hover:text-foreground">
               Not now
             </button>
           </div>

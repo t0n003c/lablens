@@ -4,6 +4,10 @@ LabLens is a self-hosted health report app for uploading MyQuest Diagnostics PDF
 
 LabLens is not a doctor. It flags values against supplied reference ranges and avoids diagnosis or treatment claims.
 
+Current release: `1.0.0`
+
+Future updates should stay local and be fully tested before GitHub push, tag, or image publish approval. See `docs/RELEASE_PROCESS.md`.
+
 ## Stack
 
 - Next.js App Router, TypeScript, Tailwind CSS
@@ -56,6 +60,7 @@ docker compose -f docker-compose.image.yml up -d
 ```
 
 The image is published as `ghcr.io/t0n003c/lablens:latest` from the `main` branch.
+The current stable app release is `1.0.0`.
 
 Use `.env.example` for local development and `.env.nas.example` for NAS or
 Dockge image deployment.
@@ -116,10 +121,13 @@ npm run audit:deps
 
 ## Important Files
 
+- `CHANGELOG.md` records release notes.
 - `docs/PROJECT_STATUS.md` tracks current progress and next work.
+- `docs/RELEASE_PROCESS.md` records the local-first release workflow.
 - `docs/ARCHITECTURE.md` records the system design.
 - `docs/DESIGN_DECISIONS.md` records product and UI decisions.
 - `docs/adr/0001-stack-and-hosting.md` records the first architecture decision.
+- `docs/adr/0002-release-workflow.md` records the local-first release decision.
 - `.codex/skills/health-report-app/` contains project-local Codex guidance.
 - `.codex/agents/` contains project-specific agent prompts for future reviews.
 - `.env.example` is the local development template; `.env.nas.example` is the NAS/Dockge template.

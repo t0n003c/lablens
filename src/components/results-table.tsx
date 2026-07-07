@@ -66,9 +66,9 @@ export function ResultsTable({ results }: { results: ParsedLabResult[] }) {
 
   return (
     <>
-      <div className="overflow-x-auto rounded-md border border-border bg-panel">
+      <div className="min-w-0 overflow-x-auto rounded-md border border-border-soft bg-panel/90 shadow-[var(--shadow-card)] backdrop-blur">
         <table className="w-full min-w-[720px] border-collapse text-left text-sm">
-          <thead className="border-b border-border bg-panel-muted text-xs uppercase tracking-[0.12em] text-muted">
+          <thead className="border-b border-border-soft bg-panel-muted/85 text-xs uppercase tracking-[0.12em] text-muted">
             <tr>
               <th className="px-4 py-3 font-semibold">Test</th>
               <th className="px-4 py-3 font-semibold">Category</th>
@@ -77,14 +77,14 @@ export function ResultsTable({ results }: { results: ParsedLabResult[] }) {
               <th className="px-4 py-3 font-semibold">Flag</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-border">
+          <tbody className="divide-y divide-border-soft">
             {results.map((result, index) => {
               const rowId = `${tooltipBaseId}-${index}`;
               const description = getLabTestDescription(result);
               const active = tooltip?.id === rowId;
 
               return (
-                <tr key={`${result.testName}-${result.value ?? result.stringValue}-${index}`} className="align-middle">
+                <tr key={`${result.testName}-${result.value ?? result.stringValue}-${index}`} className="align-middle transition hover:bg-panel-muted/55">
                   <td className="px-4 py-3 font-medium text-foreground">
                     <button
                       type="button"
@@ -93,7 +93,7 @@ export function ResultsTable({ results }: { results: ParsedLabResult[] }) {
                       onFocus={(event) => handleTooltipFocus(event, rowId, description)}
                       onMouseEnter={(event) => handleTooltipMouseEnter(event, rowId, description)}
                       onMouseLeave={() => setTooltip(null)}
-                      className="rounded-sm text-left underline decoration-border decoration-dotted underline-offset-4 hover:text-primary focus:outline-none focus:ring-2 focus:ring-ring"
+                      className="rounded-sm text-left underline decoration-border decoration-dotted underline-offset-4 transition hover:text-primary focus:outline-none focus:ring-2 focus:ring-ring"
                     >
                       {result.testName}
                     </button>
@@ -124,7 +124,7 @@ export function ResultsTable({ results }: { results: ParsedLabResult[] }) {
                 top: tooltip.top,
                 transform: tooltip.placement === "above" ? "translateY(-100%)" : undefined,
               }}
-              className="pointer-events-none fixed z-50 max-w-[min(22rem,calc(100vw-1.5rem))] rounded-md border border-border bg-panel p-3 text-sm leading-6 text-foreground shadow-lg"
+              className="pointer-events-none fixed z-50 max-w-[min(22rem,calc(100vw-1.5rem))] rounded-md border border-border-soft bg-panel/95 p-3 text-sm leading-6 text-foreground shadow-[var(--shadow-glass)] backdrop-blur"
             >
               {tooltip.description}
             </div>,

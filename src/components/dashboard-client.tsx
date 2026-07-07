@@ -2,14 +2,14 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Activity, AlertTriangle, Apple, CheckCircle2, Dumbbell, FileUp, HeartPulse, Info, Moon, Plus, RotateCw, ShieldCheck, Trash2, UserRound } from "lucide-react";
+import { Apple, CheckCircle2, Dumbbell, FileUp, Info, Moon, Plus, RotateCw, Trash2 } from "lucide-react";
+import { HealthScoreHero } from "@/components/health-score-hero";
 import { ResultsTable } from "@/components/results-table";
-import { StatCard } from "@/components/stat-card";
-import { TrendChart } from "@/components/trend-chart";
+import { TrendInstrument } from "@/components/trend-instrument";
 import { buildNextStepDetails, type NextStepDetails } from "@/lib/action-plan/details";
 import { buildShortNextStep } from "@/lib/action-plan/shorten";
 import { demoResults, demoSummary, trendData } from "@/lib/demo/data";
-import { buildTrendInsights, buildTrendPoint, getVisibleTrendMetrics, hasTrendValue, trendMetrics, type TrendMetricKey, type TrendTone } from "@/lib/labs/trends";
+import { buildTrendInsights, buildTrendPoint, getVisibleTrendMetrics, hasTrendValue, trendMetrics, type TrendMetricKey } from "@/lib/labs/trends";
 import type { HealthSummary, ParsedLabResult } from "@/lib/labs/types";
 
 type ApiLabResult = ParsedLabResult & {
@@ -128,13 +128,6 @@ function reviewPrompts(result: ParsedLabResult) {
   return ["Compare with prior reports and recent routine changes.", "Ask whether repeat testing or follow-up is appropriate."];
 }
 
-function trendToneClass(tone: TrendTone) {
-  if (tone === "success") return "border-success/30 bg-success/10 text-success";
-  if (tone === "warning") return "border-warning/30 bg-warning/10 text-warning";
-  if (tone === "info") return "border-primary/30 bg-primary/10 text-primary";
-  return "border-border bg-panel-muted text-muted";
-}
-
 const hiddenStepLabels = new Set([
   "this week",
   "easy",
@@ -149,7 +142,8 @@ const hiddenStepLabels = new Set([
 ]);
 
 function shouldShowStepLabel(label: string) {
-  return !hiddenStepLabels.has(label.toLowerCase());
+  const normalizedLabel = label.toLowerCase();
+  return !hiddenStepLabels.has(normalizedLabel) && !normalizedLabel.includes("this week");
 }
 
 function nextStepText(item: NextStepItem) {
@@ -235,7 +229,6 @@ export function DashboardClient() {
   const [planMessage, setPlanMessage] = useState("");
   const [rawPdfStorage, setRawPdfStorage] = useState(false);
   const [selectedTrendMetric, setSelectedTrendMetric] = useState<TrendMetricKey>();
-  const [trendInfoOpen, setTrendInfoOpen] = useState(false);
   const [openWhyStepId, setOpenWhyStepId] = useState<string | null>(null);
   const [recentlyDeletedStepIds, setRecentlyDeletedStepIds] = useState<Set<string>>(() => new Set());
   const nextStepsRef = useRef<HTMLElement | null>(null);
@@ -328,8 +321,6 @@ export function DashboardClient() {
     () => (latestReport?.labResults ?? []).map(normalizeResult),
     [latestReport],
   );
-  const abnormalCount = latestResults.filter((result) => !["NORMAL", "UNKNOWN"].includes(result.flag)).length;
-  const totalValues = reports.reduce((total, report) => total + report.labResults.length, 0);
   const latestSummary = latestReport?.summaryJson;
   const latestRecommendations = latestSummary?.recommendations ?? latestReport?.recommendationsJson;
   const selectedPersonName = people.find((person) => person.id === selectedPersonId)?.name;
@@ -359,11 +350,18 @@ export function DashboardClient() {
   const activeTrendMetric = visibleTrendMetrics.some((metric) => metric.key === selectedTrendMetric)
     ? selectedTrendMetric
     : visibleTrendMetrics[0]?.key;
-  const activeTrendLabel = visibleTrendMetrics.find((metric) => metric.key === activeTrendMetric)?.label;
   const supportedTrendLabels = formatList(trendMetrics.map((metric) => metric.label));
   const visibleTrendLabels = formatList(visibleTrendMetrics.map((metric) => metric.label));
   const trendInfoText = `The graph shows percent change from each test's first saved result, so tests with different units can share one chart. Lines appear only when the app can safely match the same marker across reports. It currently looks for ${supportedTrendLabels}${visibleTrendLabels ? `; your saved reports include ${visibleTrendLabels}.` : "."}`;
   const reviewResults = displayResults.filter((result) => !["NORMAL", "UNKNOWN"].includes(result.flag));
+  const unknownResultCount = displayResults.filter((result) => result.flag === "UNKNOWN").length;
+  const snapshotScore = Math.max(
+    35,
+    Math.min(98, Math.round(92 - reviewResults.length * 8 - unknownResultCount * 2 + Math.min(visibleTrendMetrics.length * 2, 6))),
+  );
+  const scoreReason = `Why: ${reviewResults.length ? `${reviewResults.length} flagged` : "no flagged values"}${
+    unknownResultCount ? `, ${unknownResultCount} not checked` : ""
+  }${visibleTrendMetrics.length ? `, ${visibleTrendMetrics.length} matched trend${visibleTrendMetrics.length === 1 ? "" : "s"}` : ""}.`;
   const trendInsights = buildTrendInsights(displayTrendData, activeTrendMetric);
   const flagExplanations = new Map((displaySummary?.flags ?? []).map((flag) => [flag.testName, flag.explanation]));
   const recommendationGroups = [
@@ -758,8 +756,47 @@ export function DashboardClient() {
     );
   }
 
+  function renderStepSideActions(item: NextStepItem, details: NextStepDetails, scope: string) {
+    return (
+      <div className="ml-auto flex max-w-full shrink-0 flex-wrap items-center justify-end gap-2 text-xs sm:max-w-[18rem]">
+        {renderStepMeta(item, details, scope)}
+        {renderStepControls(item, details)}
+      </div>
+    );
+  }
+
+  const startHereCard = topStepItems.length ? (
+    <article className="h-full rounded-md border border-primary/25 bg-primary/10 p-4 shadow-sm">
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-primary">Start here</p>
+          <p className="mt-1 text-sm font-semibold text-foreground">Smallest useful steps from this report.</p>
+        </div>
+        <Link href="#my-next-steps" className="rounded-md border border-primary/30 bg-panel/60 px-2.5 py-1.5 text-xs font-semibold text-primary transition hover:-translate-y-0.5 hover:bg-primary/10">
+          All steps
+        </Link>
+      </div>
+      <div className="mt-3 grid gap-2">
+        {topStepItems.map(({ item, details }, index) => {
+          const done = item.status === "DONE";
+          return (
+            <div key={`hero-${item.id}`} className="rounded-md border border-border-soft bg-panel/75 p-3 dark:bg-white/[0.05]">
+              <div className="flex items-start gap-2">
+                <span className="mt-0.5 grid size-6 shrink-0 place-items-center rounded-md bg-primary text-xs font-semibold text-white dark:text-[#02110f]">{index + 1}</span>
+                <div className="grid min-w-0 flex-1 grid-cols-1 items-start gap-2 sm:grid-cols-[minmax(0,1fr)_auto] sm:gap-3">
+                  <p className={`text-sm leading-6 ${done ? "text-muted line-through" : "text-foreground"}`}>{item.text}</p>
+                  {renderStepSideActions(item, details, "hero")}
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </article>
+  ) : null;
+
   const nextStepsSection = (
-    <section ref={nextStepsRef} className="scroll-mt-8 grid gap-4 rounded-md border border-border bg-panel p-5">
+    <section id="my-next-steps" ref={nextStepsRef} className="scroll-mt-8 grid gap-5 rounded-md border border-border-soft bg-surface-glass p-5 shadow-[var(--shadow-glass)] backdrop-blur">
       <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
         <div>
           <h2 className="text-xl font-semibold">My next steps</h2>
@@ -770,40 +807,18 @@ export function DashboardClient() {
             type="button"
             onClick={() => void restoreDeletedNextSteps()}
             disabled={!resettableDeletedItems.length || Boolean(planBusyAction)}
-            className="inline-flex min-h-10 items-center gap-2 rounded-md border border-border px-3 text-sm font-semibold text-muted disabled:cursor-not-allowed disabled:opacity-50"
+            className="inline-flex min-h-10 items-center gap-2 rounded-md border border-border bg-panel px-3 text-sm font-semibold text-muted transition hover:border-primary/50 hover:bg-panel-muted hover:text-foreground disabled:cursor-not-allowed disabled:opacity-50"
           >
             <RotateCw className="size-4" aria-hidden="true" />
             {planBusyAction === "reset" ? "Resetting..." : "Reset"}
           </button>
         ) : null}
       </div>
-      {planMessage ? <p className="rounded-md bg-panel-muted p-3 text-sm text-muted">{planMessage}</p> : null}
-      {topStepItems.length ? (
-        <section className="grid gap-3 border-y border-border py-4">
-          <div>
-            <h3 className="font-semibold">Start here this week</h3>
-            <p className="text-sm text-muted">The highest-impact steps from this report.</p>
-          </div>
-          <div className="grid gap-3 lg:grid-cols-3">
-            {topStepItems.map(({ item, details }, index) => {
-              const done = item.status === "DONE";
-              return (
-                <article key={`top-${item.id}`} className="rounded-md border border-primary/20 bg-primary/5 p-3">
-                  <div className="grid gap-0">
-                    <span className="w-fit rounded-md bg-primary px-2 py-1 text-xs font-semibold text-white dark:text-[#06201d]">#{index + 1}</span>
-                    <p className={`mt-3 text-sm font-semibold leading-6 ${done ? "text-muted line-through" : "text-foreground"}`}>{item.text}</p>
-                    {renderStepFooter(item, details, "top")}
-                  </div>
-                </article>
-              );
-            })}
-          </div>
-        </section>
-      ) : null}
+      {planMessage ? <p className="rounded-md border border-border-soft bg-panel/75 p-3 text-sm text-muted">{planMessage}</p> : null}
       {detailedNextStepItems.length ? (
         <div className="grid gap-4 md:grid-cols-2">
           {nextStepGroups.map((group) => (
-            <section key={group.title} className="rounded-md border border-border bg-panel-muted p-4">
+            <section key={group.title} className="rounded-md border border-border-soft bg-surface-raised/80 p-4 dark:bg-white/[0.04]">
               <div className="flex items-center gap-2">
                 <group.icon className="size-5 text-primary" aria-hidden="true" />
                 <h3 className="font-semibold">{group.title}</h3>
@@ -838,74 +853,65 @@ export function DashboardClient() {
     </section>
   );
 
+  const headerPersonSelector =
+    !isGuestDemo && people.length ? (
+      <label className="grid w-full gap-2 text-sm font-medium sm:w-80">
+        Person
+        <select
+          value={selectedPersonId}
+          onChange={(event) => void loadPersonDashboard(event.target.value)}
+          className="min-h-11 rounded-md border border-border-soft bg-panel/85 px-3"
+        >
+          {people.map((person) => (
+            <option key={person.id} value={person.id}>
+              {person.name}
+              {person.isDefault ? " (default)" : ""}
+            </option>
+          ))}
+        </select>
+      </label>
+    ) : (
+      <label className="grid w-full gap-2 text-sm font-medium sm:w-80">
+        Person
+        <select value={isLoading ? "loading" : "demo"} disabled className="min-h-11 rounded-md border border-border-soft bg-panel/85 px-3 text-muted">
+          <option value={isLoading ? "loading" : "demo"}>{isLoading ? "Loading..." : "Demo profile"}</option>
+        </select>
+      </label>
+    );
+
   return (
-    <div className="mx-auto grid w-full max-w-7xl gap-8 px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
-      <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+    <div className="mx-auto grid w-full max-w-[1500px] gap-5 px-3 py-4 sm:gap-8 sm:px-6 sm:py-6 lg:px-8 lg:py-8">
+      <div className="flex flex-col gap-4 rounded-md border border-border-soft bg-surface-glass p-4 shadow-[var(--shadow-glass)] backdrop-blur sm:p-5 lg:flex-row lg:items-end lg:justify-between">
         <div>
-          <p className="text-sm font-semibold uppercase tracking-[0.16em] text-primary">Health snapshot</p>
-          <h1 className="mt-2 text-3xl font-semibold text-foreground sm:text-4xl">Lab report review</h1>
-          <p className="mt-3 max-w-2xl text-base leading-7 text-muted">
-            Review extracted results, spot range-based flags, and keep trend notes ready for your clinician.
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-primary sm:text-sm">Health snapshot</p>
+          <h1 className="mt-2 text-2xl font-semibold text-foreground sm:text-4xl">Lab report review</h1>
+          <p className="mt-2 max-w-2xl text-sm leading-6 text-muted sm:mt-3 sm:text-base sm:leading-7">
+            See what changed, what needs review, and what small steps fit this report.
           </p>
         </div>
-        <div className="flex flex-wrap gap-3">
-          <Link href="/upload" className="inline-flex min-h-11 items-center gap-2 rounded-md bg-primary px-4 font-semibold text-white dark:text-[#06201d]">
-            <FileUp className="size-4" aria-hidden="true" />
-            Upload PDF
-          </Link>
-          <Link href="/manual" className="inline-flex min-h-11 items-center gap-2 rounded-md border border-border px-4 font-semibold">
-            <Plus className="size-4" aria-hidden="true" />
-            Add result
-          </Link>
-        </div>
+        {headerPersonSelector}
       </div>
 
       {isGuestDemo ? (
-        <p className="rounded-md border border-border bg-panel p-4 text-sm text-muted">Login to see saved reports. Demo values are shown below.</p>
+        <p className="rounded-md border border-border-soft bg-surface-glass p-4 text-sm text-muted shadow-[var(--shadow-glass)] backdrop-blur">Login to see saved reports. Demo values are shown below.</p>
       ) : null}
 
       {isLoading ? (
-        <p className="rounded-md border border-border bg-panel p-4 text-sm text-muted">Loading saved reports...</p>
-      ) : null}
-
-      {!isGuestDemo && people.length ? (
-        <section className="rounded-md border border-border bg-panel p-4">
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <label className="grid gap-2 text-sm font-medium sm:w-80">
-              Person
-              <select
-                value={selectedPersonId}
-                onChange={(event) => void loadPersonDashboard(event.target.value)}
-                className="min-h-11 rounded-md border border-border bg-background px-3"
-              >
-                {people.map((person) => (
-                  <option key={person.id} value={person.id}>
-                    {person.name}
-                    {person.isDefault ? " (default)" : ""}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <Link href="/people" className="inline-flex min-h-10 items-center gap-2 rounded-md border border-border px-3 text-sm font-semibold">
-              <UserRound className="size-4" aria-hidden="true" />
-              Manage people
-            </Link>
-          </div>
-        </section>
+        <p className="rounded-md border border-border-soft bg-surface-glass p-4 text-sm text-muted shadow-[var(--shadow-glass)] backdrop-blur">Loading saved reports...</p>
       ) : null}
 
       {mode === "user-empty" ? (
-        <section className="rounded-md border border-border bg-panel p-6">
+        <section className="rounded-md border border-border-soft bg-surface-glass p-6 shadow-[var(--shadow-glass)] backdrop-blur">
           <h2 className="text-xl font-semibold">No saved lab values{selectedPersonName ? ` for ${selectedPersonName}` : ""}</h2>
           <p className="mt-2 max-w-2xl text-sm leading-6 text-muted">
             Your saved reports and lab values have been deleted or have not been added yet. Upload a PDF or add a result manually to rebuild your dashboard.
           </p>
           <div className="mt-5 flex flex-wrap gap-3">
-            <Link href="/upload" className="inline-flex min-h-11 items-center gap-2 rounded-md bg-primary px-4 font-semibold text-white dark:text-[#06201d]">
+            <Link href="/upload" className="inline-flex min-h-11 items-center gap-2 rounded-md bg-primary px-4 font-semibold text-white dark:text-[#02110f]">
               <FileUp className="size-4" aria-hidden="true" />
               Upload PDF
             </Link>
-            <Link href="/manual" className="inline-flex min-h-11 items-center gap-2 rounded-md border border-border px-4 font-semibold">
+            <Link href="/manual" className="inline-flex min-h-11 items-center gap-2 rounded-md border border-border-soft bg-panel/70 px-4 font-semibold">
               <Plus className="size-4" aria-hidden="true" />
               Add result
             </Link>
@@ -915,42 +921,23 @@ export function DashboardClient() {
 
       {!isLoading && mode !== "user-empty" ? (
         <>
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-            <StatCard
-              icon={HeartPulse}
-              label={hasData ? "Saved values" : "Latest results"}
-              value={`${hasData ? totalValues : demoResults.length} values`}
-              href="#latest-lab-values"
-              ariaLabel="Open latest lab values"
-            />
-            <StatCard
-              icon={AlertTriangle}
-              label="Needs review"
-              value={`${hasData ? abnormalCount : 3} flags`}
-              tone="warning"
-              href="#review-flags"
-              ariaLabel="Open flagged lab values that need review"
-            />
-            <StatCard
-              icon={Activity}
-              label="Saved reports"
-              value={hasData ? `${reports.length}` : "Demo"}
-              tone={hasData ? "success" : "default"}
-              href={hasData ? "/reports" : "/login"}
-              ariaLabel={hasData ? "Open saved reports" : "Login to see saved reports"}
-            />
-            <StatCard
-              icon={ShieldCheck}
-              label="Raw PDF storage"
-              value={rawPdfStorage ? "On" : "Off"}
-              href="/settings#data"
-              ariaLabel="Open raw PDF storage settings"
-            />
-          </div>
+          <HealthScoreHero
+            rawPdfStorageHref="/settings#data"
+            rawPdfStorageValue={rawPdfStorage ? "On" : "Off"}
+            reviewCount={reviewResults.length}
+            reviewHref="#review-flags"
+            reviewValue={`${reviewResults.length} flag${reviewResults.length === 1 ? "" : "s"}`}
+            savedReportsHref={hasData ? "/reports" : "/login"}
+            savedReportsValue={hasData ? `${reports.length}` : "Demo"}
+            score={snapshotScore}
+            scoreReason={scoreReason}
+            statusLabel={snapshotScore >= 85 ? "Steady snapshot" : snapshotScore >= 70 ? "Review a few items" : "Careful review"}
+            startHereCard={startHereCard}
+          />
 
           {nextStepsSection}
 
-          <section id="review-flags" className="scroll-mt-8 grid gap-4 rounded-md border border-border bg-panel p-5">
+          <section id="review-flags" className="scroll-mt-8 grid gap-4 rounded-md border border-border-soft bg-surface-glass p-5 shadow-[var(--shadow-glass)] backdrop-blur">
             <div>
               <h2 className="text-xl font-semibold">Needs review</h2>
               <p className="text-sm text-muted">
@@ -962,7 +949,7 @@ export function DashboardClient() {
                 <p className="text-sm text-muted">{`${reviewResults.length} value${reviewResults.length === 1 ? "" : "s"} outside or near the supplied reference range.`}</p>
                 <div className="grid gap-3 md:grid-cols-2">
                   {reviewResults.map((result) => (
-                    <article key={`${result.testName}-${result.value ?? result.stringValue}`} className="rounded-md bg-panel-muted p-4">
+                    <article key={`${result.testName}-${result.value ?? result.stringValue}`} className="rounded-md border border-border-soft bg-surface-raised/80 p-4 dark:bg-white/[0.04]">
                       <div className="flex flex-wrap items-center justify-between gap-2">
                         <h3 className="font-semibold">{result.testName}</h3>
                         <span className="rounded-md bg-warning/10 px-2 py-1 text-xs font-semibold text-warning">{result.flag.toLowerCase()}</span>
@@ -987,54 +974,19 @@ export function DashboardClient() {
             )}
           </section>
 
-          <section className="grid gap-5 lg:grid-cols-[1.1fr_0.9fr]">
-            <div className="relative rounded-md border border-border bg-panel p-5">
-              <div className="flex items-start gap-3">
-                <div className="relative">
-                  <button
-                    type="button"
-                    aria-label="Trend chart info"
-                    aria-expanded={trendInfoOpen}
-                    onClick={() => setTrendInfoOpen((open) => !open)}
-                    onMouseEnter={() => setTrendInfoOpen(true)}
-                    onMouseLeave={() => setTrendInfoOpen(false)}
-                    onFocus={() => setTrendInfoOpen(true)}
-                    onBlur={() => setTrendInfoOpen(false)}
-                    className="inline-flex size-9 items-center justify-center rounded-md border border-border bg-panel-muted text-primary transition hover:-translate-y-0.5 hover:border-primary/60 hover:bg-primary/10 focus:outline-none focus:ring-2 focus:ring-ring"
-                  >
-                    <Info className="size-4" aria-hidden="true" />
-                  </button>
-                  {trendInfoOpen ? (
-                    <div className="absolute left-0 top-11 z-20 w-[min(22rem,calc(100vw-3rem))] rounded-md border border-border bg-panel p-3 text-sm leading-6 text-muted shadow-lg">
-                      {trendInfoText}
-                    </div>
-                  ) : null}
-                </div>
-                <h2 className="text-xl font-semibold">Trends</h2>
-              </div>
-              {displayTrendData.length ? (
-                <TrendChart data={displayTrendData} selectedMetric={activeTrendMetric} onSelectMetric={setSelectedTrendMetric} />
-              ) : (
-                <p className="mt-4 text-sm text-muted">Add more reports to build trend charts.</p>
-              )}
-            </div>
-            <div className="rounded-md border border-border bg-panel p-5">
-              <h2 className="text-xl font-semibold">{activeTrendLabel ? `What ${activeTrendLabel} shows` : "What the trend shows"}</h2>
-              <p className="mt-1 text-sm text-muted">Plain-language notes for the selected line.</p>
-              <ul className="mt-4 grid gap-3 text-sm leading-6 text-muted">
-                {trendInsights.map((item) => (
-                  <li key={`${item.metricKey}-${item.status}-${item.summary}`} className="border-l-4 border-primary pl-3">
-                    <span className={`inline-flex rounded-md border px-2 py-0.5 text-xs font-semibold ${trendToneClass(item.tone)}`}>{item.status}</span>
-                    <p className="mt-2 font-medium text-foreground">{item.summary}</p>
-                    <p className="mt-1">{item.detail}</p>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </section>
+          <TrendInstrument
+            data={displayTrendData}
+            selectedMetric={activeTrendMetric}
+            onSelectMetric={setSelectedTrendMetric}
+            trendInfoText={trendInfoText}
+            trendInsights={trendInsights}
+          />
 
-          <section id="latest-lab-values" className="scroll-mt-8 grid gap-4">
-            <h2 className="text-xl font-semibold">Latest lab values</h2>
+          <section id="latest-lab-values" className="scroll-mt-8 grid gap-4 rounded-md border border-border-soft bg-surface-glass p-5 shadow-[var(--shadow-glass)] backdrop-blur">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-primary">Full table</p>
+              <h2 className="mt-1 text-xl font-semibold">Latest lab values</h2>
+            </div>
             {displayResults.length ? <ResultsTable results={displayResults} /> : <p className="rounded-md border border-border bg-panel p-4 text-sm text-muted">No structured lab rows were saved for the latest report.</p>}
           </section>
         </>

@@ -1,5 +1,7 @@
 # Security And Privacy
 
+Current stable release: `1.0.0`
+
 ## Safety Model
 
 LabLens is educational software. It explains trends and flags values against supplied reference ranges, but it must never diagnose, prescribe, or claim that a user has a condition.
@@ -8,6 +10,7 @@ LabLens is educational software. It explains trends and flags values against sup
 
 - Passwords are hashed with bcrypt.
 - Sessions use HTTP-only, same-site cookies.
+- Mutating API requests under `/api/*` pass through a same-origin proxy guard before route handlers run.
 - Uploads are PDF-only with configurable size limits.
 - Raw PDF storage is off by default.
 - PWA service worker caches only static install assets and does not cache lab pages or API responses.

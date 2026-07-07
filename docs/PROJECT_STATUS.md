@@ -1,6 +1,18 @@
 # Project Status
 
-Last updated: 2026-07-06
+Last updated: 2026-07-07
+
+## Current Release
+
+- Current stable release: `1.0.0`.
+- Release `1.0.0` marks the current NAS-ready LabLens baseline.
+- Future updates should remain local and fully tested until the user explicitly approves a GitHub push, release tag, or image publish.
+
+## Local Post-1.0 Work
+
+- In progress locally: premium UI refresh using image-generated design boards, a documented design system, clickable prototype, generated LabLens illustration assets, final desktop/mobile/prototype boards, refreshed tokens, System/Light/OLED Dark appearance control, active navigation states, mood-board glass/lens visual treatment, dashboard health score, enhanced trend chart controls, and polished auth/upload/report/settings surfaces.
+- Current local UI direction follows `docs/design/1.0-ui-refresh/MOODBOARD_ALIGNMENT_PLAN.md` and ADR 0003 so the app matches the original mood board's layout and material quality more closely.
+- This local UI refresh has not been pushed to GitHub or published as a new Docker image.
 
 ## Completed
 
@@ -43,6 +55,23 @@ Last updated: 2026-07-06
 - Added safe dependency overrides for audited transitive packages; `npm audit --audit-level=moderate` currently reports zero vulnerabilities.
 - Added smoke test script and focused unit tests.
 - Added project documentation, ADR, project-local Codex skill, and project-local agent prompts.
+- Added `docs/design/1.0-ui-refresh/` with mood boards, high-fidelity direction, responsive/auth/upload flow boards, a clickable prototype, design-system notes, and UX audit.
+- Added final image-generation boards for desktop flows, responsive mobile/tablet flows, and interaction motion states.
+- Replaced dead Settings-style controls with honest status panels for server-configured Turnstile/runtime protection and AI summary provider behavior.
+- Integrated the generated glass/lab report illustration into real app surfaces so the app reflects the mood-board material direction, especially auth and upload PDF flow, while keeping the dashboard focused on usable data.
+- Added a larger mood-board asset set for trust/privacy, trend review, and upload/review contexts.
+- Added mood-board UI primitives: glass panels, instrument panels, metric tiles, marker rows, status dots, and segmented controls.
+- Rebuilt the dashboard first viewport around a composed health-score hero with a short score reason, `Start here` beside the score, and three colored status cards for Saved reports, Raw PDF storage, and Needs review.
+- Moved the dashboard person selector into the top Health snapshot header and removed the duplicate person card below it.
+- Removed the duplicate dashboard shortcut rail so Saved values does not repeat above the table and the detailed `Needs review` section remains the focused flagged-values area.
+- Replaced the dashboard trend card and separate trend explanation card with a dark trend instrument that keeps selected-line insight beside the chart.
+- Updated sidebar, auth, upload, next steps, needs review, and latest lab values surfaces to use the new material system.
+- Replaced the desktop sidebar auth card with a compact account icon beside the LabLens mark; hover or click shows signed-in details and a logout action.
+- Added a dedicated mobile dashboard health-score card so the phone layout no longer feels like a compressed desktop stack.
+- Expanded Trends with working Trend, Compare, and Distribution views, point-specific tooltips, first-click line selection, and a cleaner chart area without obvious Latest update, Matched markers, Chart tools, or Latest point readouts.
+- Made the phone PWA install prompt compact by default so it no longer covers the first dashboard card with expanded setup instructions.
+- Fixed the development hydration warning caused by the early theme script applying `data-theme` before React hydration.
+- Added a central same-origin proxy guard for mutating API routes and expanded the smoke audit to verify cross-origin authenticated writes are rejected.
 
 ## Known Gaps
 
@@ -54,6 +83,7 @@ Last updated: 2026-07-06
 
 ## Next Build Steps
 
-1. Add production account-recovery email adapter.
-2. Add Playwright smoke coverage for the upload/manual flows.
-3. Add a compare view that can compare one person's reports without mixing other people in the same account.
+1. Continue the mood-board alignment plan locally: deeper Reports, People, Settings, and upload/review composition refinements.
+2. Add Playwright smoke coverage for the upload/manual flows and visual responsive checks.
+3. Add production account-recovery email adapter.
+4. Add a compare view that can compare one person's reports without mixing other people in the same account.

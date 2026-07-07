@@ -4,6 +4,10 @@
 
 LabLens uses Next.js App Router as a full-stack app because it keeps NAS hosting simple: one web container, one Postgres container, one `.env`, and one migration path. Prisma gives typed database access and repeatable migrations. PostgreSQL is durable, familiar, and easy to back up.
 
+## Release Model
+
+Release `1.0.0` is the current stable NAS-ready baseline. Future changes should be kept local and tested before any GitHub push, because pushing to `main` publishes a new `ghcr.io/t0n003c/lablens:latest` image.
+
 ## Docker Architecture
 
 - `app`: Next.js standalone server, Prisma migrations on startup, mounted upload volume.
@@ -17,6 +21,7 @@ LabLens uses Next.js App Router as a full-stack app because it keeps NAS hosting
 ```text
 src/app/            Next.js pages and route handlers
 src/components/     UI components
+src/components/ui/  Small shadcn-style Tailwind primitives used by the refreshed UI
 src/lib/            server helpers, parsing, AI, security, demo data
 prisma/             schema, migrations, seed data
 scripts/            smoke and container health checks
@@ -76,6 +81,27 @@ The root page renders the shared app shell and a client dashboard. Signed-in use
 - `401`: show guest demo values with a login prompt.
 - Empty authenticated report list: show `No saved lab values`.
 - Authenticated reports: show saved-value counts, latest lab rows, trends, summary, recommendations, and saved next-step habits from the user's own report data.
+
+The post-1.0 local UI refresh adds a dashboard health score computed on the client from the currently displayed report data. It summarizes range-checked values, flagged values, and matched trend lines only; it does not change backend medical interpretation.
+
+## Design System Artifacts
+
+Design exploration and critique live in `docs/design/1.0-ui-refresh/`. The implemented UI uses CSS custom properties in `src/app/globals.css`, lucide icons, Tailwind classes, generated bitmap illustration assets in `public/illustrations/`, and small shadcn-style primitives in `src/components/ui/`.
+
+The app applies theme preference in two layers. `ThemeScript` reads the last saved local preference before paint, while `ThemeSync` reads signed-in account settings from `/api/settings` and refreshes local storage. This keeps System, Light, and OLED Dark consistent across pages without adding a schema change.
+
+Navigation active state is isolated in a small client component (`NavLink`) that uses `usePathname()`, while the app shell itself remains otherwise server-rendered.
+
+ADR 0003 now guides the local post-1.0 mood-board UI architecture. The first implementation pass adds material primitives such as glass panels, instrument panels, metric tiles, marker rows, status dots, segmented controls, a dedicated health-score hero, and a trend instrument so the app can match the generated mood board more closely.
+
+The generated image asset layer is split by functional surface:
+
+- `lablens-glass-trust.png` for privacy, auth, and trust cues.
+- `lablens-trend-lens.png` for the trend instrument.
+- `lablens-upload-review.png` for upload and review workflows.
+- `lablens-report-lens.png` for general report-lens context.
+
+These assets live in `public/illustrations/` and are consumed through `LabLensVisual` or specific composition components. They are treated as UI context, not as a source of health interpretation.
 
 ## PWA Install Flow
 

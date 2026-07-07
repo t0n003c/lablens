@@ -1,5 +1,7 @@
 # NAS Deployment
 
+Current stable release: `1.0.0`
+
 ## Recommended Topology
 
 ```text
@@ -49,6 +51,8 @@ curl http://localhost:3000/api/health
 ```
 
 ## Updates
+
+Only pull a newer image after the user has approved a GitHub push or release publish.
 
 Pull the latest published image and restart only changed containers:
 

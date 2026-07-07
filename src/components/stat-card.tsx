@@ -25,12 +25,12 @@ export function StatCard({
 
   const content = (
     <>
-      <div className="flex items-center justify-between gap-4">
+      <div className="flex items-start justify-between gap-4">
         <div>
-          <p className="text-sm font-medium text-muted">{label}</p>
-          <p className="mt-2 text-2xl font-semibold text-foreground">{value}</p>
+          <p className="text-sm font-semibold text-muted">{label}</p>
+          <p className="mt-2 text-2xl font-semibold tracking-normal text-foreground">{value}</p>
         </div>
-        <div className={`grid size-11 place-items-center rounded-md bg-panel-muted ${toneClass}`}>
+        <div className={`grid size-11 shrink-0 place-items-center rounded-md bg-panel-muted ${toneClass}`}>
           <Icon className="size-6" aria-hidden="true" />
         </div>
       </div>
@@ -42,7 +42,7 @@ export function StatCard({
       <Link
         href={href}
         aria-label={ariaLabel ?? `${label}: ${value}`}
-        className="rounded-md border border-border bg-panel p-5 transition hover:border-primary/50 hover:bg-panel-muted focus:outline-none focus:ring-2 focus:ring-ring"
+        className="rounded-md border border-border bg-panel p-5 shadow-[var(--shadow-card)] transition hover:border-primary/50 hover:bg-panel-muted focus:outline-none focus:ring-2 focus:ring-ring"
       >
         {content}
       </Link>
@@ -50,7 +50,7 @@ export function StatCard({
   }
 
   return (
-    <section className="rounded-md border border-border bg-panel p-5">
+    <section className="rounded-md border border-border bg-panel p-5 shadow-[var(--shadow-card)]">
       {content}
     </section>
   );
