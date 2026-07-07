@@ -1,6 +1,6 @@
 # Product Spec
 
-Release: `1.0.0`
+Release: `1.1.0`
 
 ## Product Concept
 
@@ -19,7 +19,7 @@ LabLens helps a self-hosting user upload or manually enter lab results, review e
 - Short `My next steps` actions generated from report-based recommendations.
 - Prioritized `My next steps` cards with why-this-step notes, frequency, effort, marker tags, and replacement actions.
 - Dashboard health score, cards, trend charts, recent results, flags, and shortcuts.
-- Premium post-1.0 UI refresh direction with documented light/OLED palettes, System/Light/OLED Dark appearance control, responsive layouts, clickable prototype, generated illustration asset, and shadcn-style Tailwind primitives.
+- Premium 1.1 UI refresh with documented light/OLED palettes, System/Light/OLED Dark appearance control, responsive layouts, clickable prototype, generated illustration asset, and shadcn-style Tailwind primitives.
 - Mood-board visual identity applied to real product surfaces through glass/lens report imagery, private-by-design cards, and stronger health-score hierarchy.
 - Report history with search, person filters, and future compare/export workflows.
 - People tab for report profiles; Settings for security, 2FA, Turnstile, AI provider, data export/deletion, and theme.

@@ -1,6 +1,6 @@
 # Mood Board Alignment Plan
 
-Status: partially implemented local post-1.0 work
+Status: released in LabLens 1.1.0 with follow-up refinements still planned
 
 ## Implementation Progress
 

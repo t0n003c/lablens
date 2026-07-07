@@ -12,7 +12,7 @@ LabLens now has a working NAS deployment and a published container image. Pushin
 
 ## Decision
 
-Treat the current app as release `1.0.0`. Future updates should be developed and tested locally first. Do not push to GitHub, create release tags, or trigger a container publish unless the user explicitly approves the release.
+Treat the current app as release `1.1.0`. Future updates should be developed and tested locally first. Do not push to GitHub, create release tags, or trigger a container publish unless the user explicitly approves the release.
 
 ## Consequences
 

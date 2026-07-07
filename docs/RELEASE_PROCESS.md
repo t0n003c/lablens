@@ -1,6 +1,6 @@
 # Release Process
 
-Current stable release: `1.0.0`
+Current stable release: `1.1.0`
 
 ## Local-First Rule
 

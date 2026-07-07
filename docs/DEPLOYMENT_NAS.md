@@ -1,6 +1,6 @@
 # NAS Deployment
 
-Current stable release: `1.0.0`
+Current stable release: `1.1.0`
 
 ## Recommended Topology
 

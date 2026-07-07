@@ -4,7 +4,7 @@ Date: 2026-07-06
 
 ## Status
 
-Accepted and partially implemented for local post-1.0 work.
+Accepted and shipped in release `1.1.0`, with follow-up refinements still planned.
 
 ## Context
 
@@ -64,7 +64,7 @@ Tradeoffs:
 - Do not ship controls that are not backed by working behavior.
 - Do not change backend contracts unless a later product feature explicitly needs it.
 - Do not change health interpretation logic or make diagnostic claims.
-- Do not publish the post-1.0 UI work until the user explicitly approves.
+- Future mood-board follow-up work should stay local until the user explicitly approves the next release.
 
 ## Verification
 

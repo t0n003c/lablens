@@ -6,7 +6,7 @@ LabLens uses Next.js App Router as a full-stack app because it keeps NAS hosting
 
 ## Release Model
 
-Release `1.0.0` is the current stable NAS-ready baseline. Future changes should be kept local and tested before any GitHub push, because pushing to `main` publishes a new `ghcr.io/t0n003c/lablens:latest` image.
+Release `1.1.0` is the current stable NAS-ready baseline. Future changes should be kept local and tested before any GitHub push, because pushing to `main` publishes a new `ghcr.io/t0n003c/lablens:latest` image.
 
 ## Docker Architecture
 
@@ -82,7 +82,7 @@ The root page renders the shared app shell and a client dashboard. Signed-in use
 - Empty authenticated report list: show `No saved lab values`.
 - Authenticated reports: show saved-value counts, latest lab rows, trends, summary, recommendations, and saved next-step habits from the user's own report data.
 
-The post-1.0 local UI refresh adds a dashboard health score computed on the client from the currently displayed report data. It summarizes range-checked values, flagged values, and matched trend lines only; it does not change backend medical interpretation.
+The 1.1.0 UI refresh adds a dashboard health score computed on the client from the currently displayed report data. It summarizes range-checked values, flagged values, and matched trend lines only; it does not change backend medical interpretation.
 
 ## Design System Artifacts
 
@@ -92,7 +92,7 @@ The app applies theme preference in two layers. `ThemeScript` reads the last sav
 
 Navigation active state is isolated in a small client component (`NavLink`) that uses `usePathname()`, while the app shell itself remains otherwise server-rendered.
 
-ADR 0003 now guides the local post-1.0 mood-board UI architecture. The first implementation pass adds material primitives such as glass panels, instrument panels, metric tiles, marker rows, status dots, segmented controls, a dedicated health-score hero, and a trend instrument so the app can match the generated mood board more closely.
+ADR 0003 guides the 1.1.0 mood-board UI architecture. The first implementation pass adds material primitives such as glass panels, instrument panels, metric tiles, marker rows, status dots, segmented controls, a dedicated health-score hero, and a trend instrument so the app can match the generated mood board more closely.
 
 The generated image asset layer is split by functional surface:
 

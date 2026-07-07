@@ -1,6 +1,6 @@
 # Testing And Smoke Plan
 
-Current stable release: `1.0.0`
+Current stable release: `1.1.0`
 
 ## Release Gate
 
@@ -41,7 +41,7 @@ npm run test
 
 Date: 2026-07-06
 
-Completed locally for the post-1.0 UI refresh:
+Completed locally and released for the 1.1.0 UI refresh:
 
 - `npm run lint` passed.
 - `npm run test` passed: 5 files, 32 tests.

@@ -1,6 +1,6 @@
 # Roadmap
 
-## Version 1.0.0 - Current Stable
+## Version 1.0.0
 
 - Authenticated single-user/self-hosted experience.
 - PDF upload with draft review.
@@ -15,11 +15,18 @@
 - Phone-installable PWA support.
 - Docker Compose deployment.
 
-## Version 1.1+
+## Version 1.1.0 - Current Stable
+
+- Premium mood-board aligned UI refresh for dashboard, auth, upload, settings, reports, people, and navigation.
+- Health-score hero, Start Here, My Next Steps grouping, refreshed status cards, and compact sidebar account menu.
+- System/Light/OLED Dark appearance support.
+- Expanded trend instrument with Trend, Compare, Distribution, zoom, point-specific tooltips, and selected-line insights.
+- Same-origin proxy guard for mutating API routes and expanded smoke audit coverage.
+
+## Version 1.2+
 
 - Hold future updates locally until release approval.
 - Expand local smoke coverage before the next GitHub push.
-- Complete and verify the post-1.0 mood-board aligned UI refactor locally before any GitHub push or Docker image publish.
 - Finish the secondary mood-board refactors for Reports, People, Settings, and the upload/review workflow.
 - Run visual smoke checks for the new health-score hero, trend instrument, light mode, OLED dark mode, desktop, tablet, and mobile layouts.
 - Add Playwright visual smoke coverage for desktop, tablet, and mobile layouts.

@@ -4,15 +4,14 @@ Last updated: 2026-07-07
 
 ## Current Release
 
-- Current stable release: `1.0.0`.
-- Release `1.0.0` marks the current NAS-ready LabLens baseline.
+- Current stable release: `1.1.0`.
+- Release `1.1.0` marks the current NAS-ready LabLens baseline with the audited UI and security refresh.
 - Future updates should remain local and fully tested until the user explicitly approves a GitHub push, release tag, or image publish.
 
-## Local Post-1.0 Work
+## Release 1.1.0 Work
 
-- In progress locally: premium UI refresh using image-generated design boards, a documented design system, clickable prototype, generated LabLens illustration assets, final desktop/mobile/prototype boards, refreshed tokens, System/Light/OLED Dark appearance control, active navigation states, mood-board glass/lens visual treatment, dashboard health score, enhanced trend chart controls, and polished auth/upload/report/settings surfaces.
-- Current local UI direction follows `docs/design/1.0-ui-refresh/MOODBOARD_ALIGNMENT_PLAN.md` and ADR 0003 so the app matches the original mood board's layout and material quality more closely.
-- This local UI refresh has not been pushed to GitHub or published as a new Docker image.
+- Released: premium UI refresh using image-generated design boards, a documented design system, clickable prototype, generated LabLens illustration assets, final desktop/mobile/prototype boards, refreshed tokens, System/Light/OLED Dark appearance control, active navigation states, mood-board glass/lens visual treatment, dashboard health score, enhanced trend chart controls, polished auth/upload/report/settings surfaces, and same-origin API mutation protection.
+- The UI direction follows `docs/design/1.0-ui-refresh/MOODBOARD_ALIGNMENT_PLAN.md` and ADR 0003 so the app matches the original mood board's layout and material quality more closely.
 
 ## Completed
 

@@ -12,7 +12,7 @@ Concept: a private lens over lab reports. The icon concept is a rounded square w
 - Cards are used for dashboard metrics and framed workflows only.
 - Desktop uses a persistent sidebar. Mobile uses a bottom navigation bar.
 - Light and dark modes use the same semantic tokens for contrast consistency.
-- The post-1.0 local UI refresh uses a dedicated light palette and OLED-friendly dark palette, backed by semantic CSS tokens.
+- The 1.1.0 UI refresh uses a dedicated light palette and OLED-friendly dark palette, backed by semantic CSS tokens.
 - Appearance has three choices: System, Light, and OLED Dark. Account settings store the choice for signed-in users, while local storage applies it early enough to avoid a jarring flash on reload.
 - Image-generated boards are treated as design input, then critiqued before implementation. Any generated social-login controls are excluded unless the backend actually supports them.
 - The generated illustration style is clean lab-report imagery with a glass lens, teal/graphite accents, no text, and no diagnostic claims.
@@ -81,7 +81,7 @@ Concept: a private lens over lab reports. The icon concept is a rounded square w
 
 ## Release Decisions
 
-- The current app is release `1.0.0`.
+- The current app is release `1.1.0`.
 - Future updates should be held locally and tested before asking for approval to push to GitHub or publish a new Docker image.
 
 ## Accessibility

@@ -1,6 +1,6 @@
 # LabLens 1.0 UI Refresh
 
-This folder records the local-only UI refresh direction for LabLens after release `1.0.0`.
+This folder records the UI refresh direction that shipped with LabLens `1.1.0`.
 
 ## Generated Boards
 
