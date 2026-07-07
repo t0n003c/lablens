@@ -53,6 +53,23 @@ jobs:
       - name: Prisma schema validation
         run: npx prisma validate
 
+      - name: Create CI compose env
+        run: |
+          cat > .env <<'EOF'
+          APP_URL=http://localhost:3000
+          SESSION_SECRET=ci-session-secret-change-only-for-github-checks
+          POSTGRES_USER=lablens
+          POSTGRES_PASSWORD=release-check
+          POSTGRES_DB=lablens
+          MAX_UPLOAD_MB=20
+          STORE_RAW_PDFS=false
+          UPLOAD_DIR=/app/data/uploads
+          TURNSTILE_ENABLED=false
+          AI_PROVIDER=mock
+          AI_MODEL=local-lab-summary
+          DATA_ENCRYPTION_KEY=ci-data-encryption-key-placeholder
+          EOF
+
       - name: Compose validation
         run: |
           docker compose config --quiet
