@@ -32,12 +32,20 @@ export async function POST(request: NextRequest) {
 
   try {
     const buffer = Buffer.from(await file.arrayBuffer());
-    const storeRawPdf = user.settings?.storeRawPdfs ?? getEnv().STORE_RAW_PDFS;
-    const storedFilePath = await maybeStoreUpload(buffer, file.name, storeRawPdf);
     const text = await extractPdfText(buffer);
     const parsed = parseLabText(text);
     const summary = await summarizeLabResults(parsed.results, recommendationContextFromPerson(person));
     const reportDate = parsed.reportDate ? new Date(parsed.reportDate) : new Date();
+    const parserWarnings = [...parsed.warnings];
+    const storeRawPdf = user.settings?.storeRawPdfs ?? getEnv().STORE_RAW_PDFS;
+    let storedFilePath: string | undefined;
+
+    try {
+      storedFilePath = await maybeStoreUpload(buffer, file.name, storeRawPdf);
+    } catch (storageError) {
+      console.error("Raw PDF storage failed", storageError);
+      parserWarnings.push("Raw PDF storage is on, but the original PDF could not be saved. Extracted values were still saved.");
+    }
 
     const report = await prisma.healthReport.create({
       data: {
@@ -50,7 +58,7 @@ export async function POST(request: NextRequest) {
         originalFileName: file.name,
         storedFilePath,
         extractedTextHash: parsed.extractedTextHash,
-        parserWarnings: parsed.warnings,
+        parserWarnings,
         summaryJson: summary,
         recommendationsJson: summary.recommendations,
         labResults: {

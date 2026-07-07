@@ -32,6 +32,7 @@ Concept: a private lens over lab reports. The icon concept is a rounded square w
 - `Needs review` explanations should be marker-specific, using the value, supplied range, and practical interpretation context instead of repeating one generic warning for every flagged row.
 - Latest lab value test names should explain themselves on hover and keyboard focus with short, cautious descriptions of what the marker is commonly used to review.
 - Latest lab value descriptions should include plain low/high associations when useful, such as low MCH often fitting iron deficiency and high MCH often fitting B12/folate, liver, thyroid, alcohol, or medicine context, while avoiding single-value diagnosis.
+- Latest lab values should mean the newest saved value for each test across all reports for the selected person, not every value from only the most recent report. The table includes a date column so users can see how current each marker is, and it sorts by useful category groups, attention status, then test name.
 - Trend charts can combine markers with different units and different healthy directions, so the graph should show relative change from each marker's own first saved result rather than raw lab values on one shared axis.
 - Trend matching must be test-specific: HDL, total cholesterol, triglycerides, ratios, and LDL should never be merged into a generic `cholesterol` trend.
 - Missing values should remain visibly missing; the chart should not quietly connect lines across reports that did not include that marker.
@@ -72,7 +73,7 @@ Concept: a private lens over lab reports. The icon concept is a rounded square w
 - Dashboard first viewport uses a composed `HealthScoreHero` instead of a generic card stack. It leads with the cautious health score and a short reason for the score, places `Start here` beside it, and uses three colored status cards for Saved reports, Raw PDF storage, and Needs review.
 - The top Health snapshot header uses the person selector instead of upload/manual actions, because multi-person context changes the whole dashboard and should be visible before reviewing values.
 - In the dashboard hero, `Start here` rows keep the action text on the left and align marker tags/buttons to the right edge so the steps read cleanly at a glance.
-- Mobile dashboard uses its own compact health-score composition instead of relying on the desktop hero to collapse. This makes the phone view closer to the mood board's mobile cards and avoids a long stack before the user sees key values.
+- Mobile dashboard uses a compact version of the desktop health-score ring and score reason instead of a separate dark treatment. This keeps the score card visually consistent across phone and desktop while avoiding a long stack before the user sees key values.
 - The dashboard no longer has a separate shortcut rail. The top `Needs review` card is a status shortcut, the detailed `Needs review` section remains the single working flagged-values area, and saved values stay in the lab table.
 - Trend charts use a dark `TrendInstrument` surface in both light and OLED modes because the mood board treated trend review as a focused instrument. The selected-line explanation stays beside the graph so users do not separate the visual movement from the plain-language meaning.
 - The trend instrument now has working Trend, Compare, and Distribution modes. These are backed by the same saved report data and avoid unsupported controls: Trend shows the zoomable line chart, Compare shows first/latest movement by marker, and Distribution shows latest value within the saved range for the selected marker set.
@@ -80,10 +81,11 @@ Concept: a private lens over lab reports. The icon concept is a rounded square w
 - The mobile PWA install prompt should stay compact by default. It can ask to install the app, but it should not auto-expand instructions or cover the first health-score card.
 - The PWA install prompt should distinguish native install support from manual browser steps. Android/Chrome can show a native install button when the context is eligible; iPhone/iPad install should point to Safari's Add to Home Screen flow, because Chrome on iOS creates Chrome-branded shortcuts instead of a clean standalone LabLens app icon.
 - The expanded generated asset set has distinct jobs: trust/privacy, trend review, upload/review, and general report-lens imagery. Assets are not used as random decoration.
+- Raw PDF storage is opt-in and best-effort. A storage-folder problem should not prevent a user from extracting lab rows, reviewing them, and saving structured values.
 
 ## Release Decisions
 
-- The current app is release `1.1.1`.
+- The current app is release `1.1.2`.
 - Future updates should be held locally and tested before asking for approval to push to GitHub or publish a new Docker image.
 
 ## Accessibility

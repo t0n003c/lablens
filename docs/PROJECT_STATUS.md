@@ -4,9 +4,15 @@ Last updated: 2026-07-07
 
 ## Current Release
 
-- Current stable release: `1.1.1`.
-- Release `1.1.1` is the current NAS-ready patch release with HTTP LAN login persistence, clearer phone PWA install behavior, an iOS touch icon, and health-score color thresholds.
+- Current stable release: `1.1.2`.
+- Release `1.1.2` is the current NAS-ready patch release with best-effort raw PDF storage, clearer latest lab values, and consistent mobile health-score styling.
 - Future updates should remain local and fully tested until the user explicitly approves a GitHub push, release tag, or image publish.
+
+## Release 1.1.2 Work
+
+- Raw PDF storage is now best-effort during upload, so turning storage on cannot block PDF extraction/review if the upload folder is unavailable; the user sees a warning instead.
+- Dashboard Latest lab values now shows the newest saved value for each test across the selected person's reports, with a date column for each value and category-based sorting for easier scanning.
+- The mobile dashboard health-score card now uses the same score-ring style, score reason, and surface treatment as desktop.
 
 ## Release 1.1.1 Work
 

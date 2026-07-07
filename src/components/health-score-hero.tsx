@@ -36,29 +36,25 @@ export function HealthScoreHero({
   return (
     <>
       <GlassPanel className="grid gap-3 p-3 md:hidden">
-        <div className="relative overflow-hidden rounded-md border border-white/10 bg-surface-instrument p-4 text-white shadow-[var(--shadow-instrument)]">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_82%_18%,rgba(61,218,199,0.22),transparent_34%),linear-gradient(145deg,rgba(255,255,255,0.08),transparent_46%)]" aria-hidden="true" />
-          <div className="relative flex items-center gap-4">
-            <div
-              className="grid size-32 shrink-0 place-items-center rounded-full p-2"
-              style={{
-                background: `conic-gradient(${scoreTone} ${score * 3.6}deg, rgb(255 255 255 / 0.12) 0deg)`,
-              }}
-              aria-hidden="true"
-            >
-              <div className="grid size-full place-items-center rounded-full border border-white/10 bg-black/25">
-                <div className="text-center">
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-primary">Score</p>
-                  <p className="mt-1 text-4xl font-semibold tracking-normal">{score}</p>
-                  <p className="text-[11px] text-white/55">/100</p>
-                </div>
+        <div className="grid content-center gap-4 rounded-md border border-border-soft bg-surface-raised/80 p-5 text-center shadow-[var(--shadow-card)] dark:bg-white/[0.04]">
+          <div
+            className="mx-auto grid size-40 place-items-center rounded-full p-3"
+            style={{
+              background: `conic-gradient(${scoreTone} ${score * 3.6}deg, color-mix(in srgb, var(--border) 70%, transparent) 0deg)`,
+            }}
+            aria-hidden="true"
+          >
+            <div className="grid size-full place-items-center rounded-full border border-border-soft bg-panel shadow-inner">
+              <div className="text-center">
+                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-primary">Health score</p>
+                <p className="mt-1 text-5xl font-semibold tracking-normal text-foreground">{score}</p>
+                <p className="text-xs text-muted">/100</p>
               </div>
             </div>
-            <div className="min-w-0">
-              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-primary">Health score</p>
-              <h2 className="mt-1 text-xl font-semibold">{statusLabel}</h2>
-              <p className="mt-2 text-sm leading-6 text-white/68">{scoreReason}</p>
-            </div>
+          </div>
+          <div>
+            <p className="text-sm font-semibold text-foreground">{statusLabel}</p>
+            <p className="mt-2 text-sm leading-6 text-muted">{scoreReason}</p>
           </div>
         </div>
 

@@ -10,6 +10,7 @@ import { buildNextStepDetails, type NextStepDetails } from "@/lib/action-plan/de
 import { buildShortNextStep } from "@/lib/action-plan/shorten";
 import { demoResults, demoSummary, trendData } from "@/lib/demo/data";
 import { getHealthScoreStatusLabel } from "@/lib/health-score";
+import { latestLabValuesByTest, sortLatestLabValues } from "@/lib/labs/latest-values";
 import { buildTrendInsights, buildTrendPoint, getVisibleTrendMetrics, hasTrendValue, trendMetrics, type TrendMetricKey } from "@/lib/labs/trends";
 import type { HealthSummary, ParsedLabResult } from "@/lib/labs/types";
 
@@ -319,8 +320,14 @@ export function DashboardClient() {
 
   const latestReport = reports[0];
   const latestResults = useMemo(
-    () => (latestReport?.labResults ?? []).map(normalizeResult),
-    [latestReport],
+    () =>
+      latestLabValuesByTest(
+        reports.map((report) => ({
+          reportDate: report.reportDate,
+          labResults: report.labResults.map(normalizeResult),
+        })),
+      ),
+    [reports],
   );
   const latestSummary = latestReport?.summaryJson;
   const latestRecommendations = latestSummary?.recommendations ?? latestReport?.recommendationsJson;
@@ -344,7 +351,7 @@ export function DashboardClient() {
   const isGuestDemo = mode === "guest-demo";
   const isLoading = mode === "loading";
   const hasData = mode === "user-data";
-  const displayResults = isGuestDemo ? demoResults : latestResults;
+  const displayResults = isGuestDemo ? sortLatestLabValues(demoResults.map((result) => ({ ...result, resultDateLabel: "Demo" }))) : latestResults;
   const displaySummary = isGuestDemo ? demoSummary : latestSummary;
   const displayTrendData = isGuestDemo ? trendData : liveTrendData;
   const visibleTrendMetrics = getVisibleTrendMetrics(displayTrendData);
@@ -942,7 +949,7 @@ export function DashboardClient() {
             <div>
               <h2 className="text-xl font-semibold">Needs review</h2>
               <p className="text-sm text-muted">
-                {hasData ? `Generated from ${latestReport?.labName ?? "your latest report"}.` : "Generated from parsed demo data until you login."}
+                {hasData ? "Based on the newest saved value for each test." : "Generated from parsed demo data until you login."}
               </p>
             </div>
             {reviewResults.length ? (
@@ -987,8 +994,11 @@ export function DashboardClient() {
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.14em] text-primary">Full table</p>
               <h2 className="mt-1 text-xl font-semibold">Latest lab values</h2>
+              <p className="mt-1 text-sm leading-6 text-muted">
+                Newest saved value for each test across all reports for the selected person.
+              </p>
             </div>
-            {displayResults.length ? <ResultsTable results={displayResults} /> : <p className="rounded-md border border-border bg-panel p-4 text-sm text-muted">No structured lab rows were saved for the latest report.</p>}
+            {displayResults.length ? <ResultsTable results={displayResults} showDate /> : <p className="rounded-md border border-border bg-panel p-4 text-sm text-muted">No structured lab rows were saved for this person.</p>}
           </section>
         </>
       ) : null}

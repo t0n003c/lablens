@@ -12,7 +12,7 @@ LabLens now has a working NAS deployment and a published container image. Earlie
 
 ## Decision
 
-Treat the current app as release `1.1.1`. Future updates should be developed and tested locally or in pull requests first. Pushes and pull requests run CI. Container publishing requires a separate, explicit run of the manual **Publish NAS Image** workflow with a version input.
+Treat the current app as release `1.1.2`. Future updates should be developed and tested locally or in pull requests first. Pushes and pull requests run CI. Container publishing requires a separate, explicit run of the manual **Publish NAS Image** workflow with a version input.
 
 ## Consequences
 

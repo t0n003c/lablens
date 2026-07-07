@@ -23,12 +23,18 @@
 - Expanded trend instrument with Trend, Compare, Distribution, zoom, point-specific tooltips, and selected-line insights.
 - Same-origin proxy guard for mutating API routes and expanded smoke audit coverage.
 
-## Version 1.1.1 - Current Stable
+## Version 1.1.1
 
 - NAS HTTP login persistence fix for private LAN deployments.
 - Mobile PWA install copy clarified for iPhone Safari, iPhone Chrome, and Android local HTTP links.
 - Dedicated Apple touch icon for cleaner iOS home-screen installs.
 - Health-score color thresholds: 80-100 green, 70-79 yellow, and below 70 red.
+
+## Version 1.1.2 - Current Stable
+
+- Raw PDF storage no longer blocks extraction if the upload folder cannot save the original file.
+- Latest lab values now show the newest saved value per test, include dates, and sort by category.
+- Mobile health-score card matches the desktop score-ring treatment.
 
 ## Version 1.2+
 

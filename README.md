@@ -4,7 +4,7 @@ LabLens is a self-hosted health report app for uploading MyQuest Diagnostics PDF
 
 LabLens is not a doctor. It flags values against supplied reference ranges and avoids diagnosis or treatment claims.
 
-Current release: `1.1.0`
+Current release: `1.1.2`
 
 Future updates should stay local and be fully tested before GitHub push, tag, or image publish approval. See `docs/RELEASE_PROCESS.md`.
 
@@ -60,7 +60,7 @@ docker compose -f docker-compose.image.yml up -d
 ```
 
 The image is published as `ghcr.io/t0n003c/lablens:latest` from the `main` branch.
-The current stable app release is `1.1.0`.
+The current stable app release is `1.1.2`.
 
 Use `.env.example` for local development and `.env.nas.example` for NAS or
 Dockge image deployment.

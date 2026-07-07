@@ -14,7 +14,7 @@ description: Build and maintain the LabLens self-hosted health report app. Use t
 5. Keep multi-person account data separated: reports, dashboard views, trends, and next steps should always respect the selected person unless an explicit all-people view is intended.
 6. Validate PDF, auth, settings, and person/report ownership changes with tests or a smoke path whenever practical.
 7. Update progress, design, architecture, or ADR docs when a decision changes.
-8. Treat the current app as release `1.1.1`. Keep future updates local and tested until the user explicitly approves a GitHub push, release tag, or image publish. Pushing or merging to `main` runs CI only; NAS image publishing requires the manual **Publish NAS Image** GitHub workflow.
+8. Treat the current app as release `1.1.2`. Keep future updates local and tested until the user explicitly approves a GitHub push, release tag, or image publish. Pushing or merging to `main` runs CI only; NAS image publishing requires the manual **Publish NAS Image** GitHub workflow.
 
 ## App Standards
 

@@ -1,6 +1,6 @@
 # GitHub Workflow
 
-Current stable release: `1.1.1`
+Current stable release: `1.1.2`
 
 ## Daily Development
 
@@ -51,4 +51,4 @@ docker compose up -d --force-recreate app
 ```
 
 For a safer rollback plan, pin Dockge to a version tag such as
-`ghcr.io/t0n003c/lablens:1.1.1` instead of `latest`.
+`ghcr.io/t0n003c/lablens:1.1.2` instead of `latest`.

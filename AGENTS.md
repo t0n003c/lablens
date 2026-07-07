@@ -6,4 +6,4 @@ This version has breaking changes — APIs, conventions, and file structure may 
 
 # Release Workflow
 
-The current LabLens baseline is release `1.1.1`. Future updates should be kept local and tested first. Do not push to GitHub, create release tags, or trigger Docker image publishing unless the user explicitly approves that release step. Pushing or merging to `main` runs CI only; NAS image publishing requires the manual **Publish NAS Image** GitHub workflow.
+The current LabLens baseline is release `1.1.2`. Future updates should be kept local and tested first. Do not push to GitHub, create release tags, or trigger Docker image publishing unless the user explicitly approves that release step. Pushing or merging to `main` runs CI only; NAS image publishing requires the manual **Publish NAS Image** GitHub workflow.

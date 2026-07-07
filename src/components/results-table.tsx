@@ -44,7 +44,22 @@ function tooltipPosition(element: HTMLElement) {
   };
 }
 
-export function ResultsTable({ results }: { results: ParsedLabResult[] }) {
+type DisplayLabResult = ParsedLabResult & {
+  resultDate?: string | Date;
+  resultDateLabel?: string;
+};
+
+function formatResultDate(result: DisplayLabResult) {
+  if (result.resultDateLabel) return result.resultDateLabel;
+  if (!result.resultDate) return "Not dated";
+
+  const date = result.resultDate instanceof Date ? result.resultDate : new Date(result.resultDate);
+  if (Number.isNaN(date.getTime())) return String(result.resultDate);
+
+  return date.toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
+}
+
+export function ResultsTable({ results, showDate = false }: { results: DisplayLabResult[]; showDate?: boolean }) {
   const tooltipBaseId = useId();
   const [tooltip, setTooltip] = useState<TooltipState | null>(null);
 
@@ -67,10 +82,11 @@ export function ResultsTable({ results }: { results: ParsedLabResult[] }) {
   return (
     <>
       <div className="min-w-0 overflow-x-auto rounded-md border border-border-soft bg-panel/90 shadow-[var(--shadow-card)] backdrop-blur">
-        <table className="w-full min-w-[720px] border-collapse text-left text-sm">
+        <table className={`w-full border-collapse text-left text-sm ${showDate ? "min-w-[820px]" : "min-w-[720px]"}`}>
           <thead className="border-b border-border-soft bg-panel-muted/85 text-xs uppercase tracking-[0.12em] text-muted">
             <tr>
               <th className="px-4 py-3 font-semibold">Test</th>
+              {showDate ? <th className="px-4 py-3 font-semibold">Date</th> : null}
               <th className="px-4 py-3 font-semibold">Category</th>
               <th className="px-4 py-3 font-semibold">Result</th>
               <th className="px-4 py-3 font-semibold">Range</th>
@@ -98,6 +114,7 @@ export function ResultsTable({ results }: { results: ParsedLabResult[] }) {
                       {result.testName}
                     </button>
                   </td>
+                  {showDate ? <td className="whitespace-nowrap px-4 py-3 text-muted">{formatResultDate(result)}</td> : null}
                   <td className="px-4 py-3 text-muted">{result.category}</td>
                   <td className="px-4 py-3 text-foreground">
                     {result.value ?? result.stringValue ?? "Not parsed"} {result.unit}

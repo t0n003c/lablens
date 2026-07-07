@@ -6,7 +6,7 @@ LabLens uses Next.js App Router as a full-stack app because it keeps NAS hosting
 
 ## Release Model
 
-Release `1.1.1` is the current stable NAS-ready baseline. Future changes should be kept local or in pull requests until reviewed and tested. Pushing or merging to `main` runs CI; publishing `ghcr.io/t0n003c/lablens:latest` now requires the manual **Publish NAS Image** GitHub workflow.
+Release `1.1.2` is the current stable NAS-ready baseline. Future changes should be kept local or in pull requests until reviewed and tested. Pushing or merging to `main` runs CI; publishing `ghcr.io/t0n003c/lablens:latest` now requires the manual **Publish NAS Image** GitHub workflow.
 
 ## Docker Architecture
 
@@ -87,7 +87,9 @@ The root page renders the shared app shell and a client dashboard. Signed-in use
 
 - `401`: show guest demo values with a login prompt.
 - Empty authenticated report list: show `No saved lab values`.
-- Authenticated reports: show saved-value counts, latest lab rows, trends, summary, recommendations, and saved next-step habits from the user's own report data.
+- Authenticated reports: show saved report counts, latest-per-test lab rows with result dates, trends, review flags, and saved next-step habits from the selected person's own report data.
+
+Latest lab rows are computed on the client with a small unit-tested helper: reports are sorted newest-first, each normalized test name is kept once, and the report date is attached to the displayed row. The resulting rows are sorted by category, attention status, and test name so the table is easier to scan without implying that every marker came from the single newest report.
 
 The 1.1.0 UI refresh adds a dashboard health score computed on the client from the currently displayed report data. It summarizes range-checked values, flagged values, and matched trend lines only; it does not change backend medical interpretation.
 
@@ -134,6 +136,7 @@ The WebAuthn challenge is stored in an HTTP-only, same-site, signed cookie for f
 - Auth brute force: in-memory rate limiting, with reverse-proxy rate limiting recommended.
 - Biometric bypass: sessions are created only after password, optional TOTP, and WebAuthn verification have all passed.
 - Sensitive uploads: raw PDF storage disabled by default.
+- Optional raw PDF storage failure: original-file retention is skipped with a visible upload warning; extraction and draft review continue with structured rows.
 - Sensitive browser storage: PWA service worker avoids caching lab data or authenticated pages.
 - Sensitive database data at rest: rely on NAS disk or volume encryption today; `DATA_ENCRYPTION_KEY` is reserved for future app-level field encryption migrations and should remain stable once set.
 

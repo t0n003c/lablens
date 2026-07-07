@@ -1,6 +1,6 @@
 # Testing And Smoke Plan
 
-Current stable release: `1.1.1`
+Current stable release: `1.1.2`
 
 ## Release Gate
 
@@ -31,6 +31,7 @@ Current focused tests:
 - Flagging treats in-range one-sided reference ranges as evaluated normal values.
 - Trend matching keeps HDL cholesterol separate from total cholesterol, avoids raw mixed-unit comparisons, and explains trend meaning beyond up/down movement.
 - Trend insight filtering focuses notes on the selected trend marker.
+- Latest lab values choose the newest saved value for each test across reports, preserve the source date, and sort rows by category, attention status, and test name.
 - Recommendations mention specific markers and values when the report contains actionable markers.
 - Recommendations can use optional profile context, including age and gender, for practical habit fit without identity-based medical claims or changed lab thresholds.
 - Session cookie serialization keeps login usable over private HTTP NAS links while preserving `Secure` cookies for HTTPS requests and reverse proxies.
@@ -64,6 +65,8 @@ Completed locally and released for the 1.1.0 UI refresh:
 - NAS auth follow-up on 2026-07-07: added request-aware session cookie serialization and unit coverage for HTTP LAN, HTTPS, and reverse-proxy forwarded protocol behavior. Local HTTP auth smoke passed by registering a temporary account, confirming the session cookie did not include `Secure`, and confirming `/api/auth/me` recognized the cookie; the temporary account was removed afterward.
 - Release 1.1.1 validation on 2026-07-07: `npm run test`, `npm run lint`, `npm run build`, `npm run audit:deps`, `npx prisma validate`, `docker compose config --quiet`, `POSTGRES_PASSWORD=release-check docker compose -f docker-compose.image.yml config --quiet`, and `SMOKE_BASE_URL=http://127.0.0.1:3010 npm run smoke` passed before GitHub push approval.
 - GitHub workflow modernization on 2026-07-07: workflow and issue-template YAML parsed successfully, `npm run test`, `npm run lint`, `docker compose config --quiet`, and `POSTGRES_PASSWORD=release-check docker compose -f docker-compose.image.yml config --quiet` passed locally before push.
+- Dashboard/upload follow-up on 2026-07-07: `npm run test`, `npm run lint`, `npm run build`, and `SMOKE_BASE_URL=http://127.0.0.1:3010 npm run smoke` passed. A temporary preview with `UPLOAD_DIR=/dev/null` confirmed raw PDF storage failure still returns extracted rows plus a visible warning. Browser checks at 390 x 844 and 1280 x 900 confirmed the health-score card style is consistent, the Latest lab values table includes `Date`, and there is no horizontal overflow.
+- Release 1.1.2 validation on 2026-07-07: `npm run test`, `npm run lint`, `npm run build`, `npm run audit:deps`, `npx prisma validate`, `docker compose config --quiet`, `POSTGRES_PASSWORD=release-check docker compose -f docker-compose.image.yml config --quiet`, and `SMOKE_BASE_URL=http://127.0.0.1:3010 npm run smoke` passed before GitHub push and NAS image publish approval. A production-style `next start` check hid the local recovery token as expected; the smoke recovery test was run against the local dev app where recovery tokens are intentionally exposed for testing.
 
 ## Smoke Tests
 
@@ -82,6 +85,7 @@ The smoke script uses a temporary account and cleans it up after the run. It che
 - Optional People profile save and saved-report refresh.
 - People create/update, report assignment to different people, per-person report filters, per-person action plan isolation, export coverage, and clean reset after account data deletion.
 - Raw PDF storage toggle and stored-file cleanup.
+- Raw PDF storage is validated separately from extraction; if storage succeeds, the smoke test confirms the stored file exists, and the upload route still allows extracted rows when storage fails.
 - Manual report creation.
 - PDF upload draft creation with at least one extracted lab row.
 - PDF review/finalize.
@@ -116,6 +120,7 @@ SMOKE_BASE_URL=http://localhost:3000 npm run smoke
 - Confirm the trend info button explains which supported markers can appear and which ones were found in the saved reports.
 - Confirm only text-only/non-numeric lab rows appear as `not evaluated`; one-sided numeric ranges should not appear as unknown.
 - Hover and keyboard-focus Latest lab values test names and confirm a short marker description appears.
+- Confirm Latest lab values shows the newest value per test across the selected person's reports, each row has a visible date, and rows scan by category with flagged rows before normal rows inside each category.
 - Confirm recommendations include food, movement, routine, and sleep sections.
 - Confirm recommendations are tied to current report markers rather than only generic wellness advice.
 - Confirm there is no separate dashboard Recommendations section.
