@@ -48,7 +48,8 @@ describe("local health summary", () => {
     expect(summary.recommendations.sleep.join(" ")).toContain("A1c");
     expect(summary.recommendations.sleep.join(" ")).not.toContain("Vitamin D");
     expect(summary.recommendations.lifestyle.join(" ")).toContain("supplement");
-    expect(summary.recommendations.lifestyle.join(" ")).toContain("default grocery swap");
+    expect(summary.recommendations.lifestyle.join(" ")).not.toContain("default grocery swap");
+    expect(summary.recommendations.lifestyle.join(" ")).not.toContain("grocery swap");
     expect(summary.recommendations.lifestyle.join(" ")).toContain("weekday rule");
     expect(summary.recommendations.lifestyle.join(" ")).not.toContain("Pick one or two habits");
     expect(summary.recommendations.lifestyle.join(" ")).not.toContain("movement habit");

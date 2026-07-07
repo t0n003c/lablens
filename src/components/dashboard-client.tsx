@@ -188,6 +188,7 @@ function isHiddenNextStep(item: NextStepItem, details: NextStepDetails) {
   const text = nextStepText(item);
   return (
     details.frequency === "Before your next lab" ||
+    (item.category === "Routine" && /default grocery swap|grocery swap|keep oats|beans, nuts, olive oil|butter, cream, or processed meat/.test(text)) ||
     /no (food|movement|exercise|sleep|routine)-specific marker stood out/.test(text) ||
     /note hormone or reproductive context|profile lists gender|hormones|menopause|pregnancy|testosterone|gender-affirming/.test(text) ||
     /keep your current movement habit steady|keep the movement habit that already fits|pick one or two habits/.test(text)

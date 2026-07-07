@@ -41,6 +41,10 @@ describe("action plan next steps", () => {
     expect(
       buildShortNextStep("Avoid extra alcohol, supplements, pain relievers, or hard workouts when liver markers are flagged."),
     ).toBe("Avoid extra alcohol, supplements, pain relievers, or hard workouts.");
+
+    expect(
+      buildShortNextStep("Make one default grocery swap this week: keep oats, beans, nuts, olive oil, or fish on hand."),
+    ).toBe("Add oats, beans, or olive oil to your list.");
   });
 
   it("adds why, frequency, effort, tags, and priority for next steps", () => {

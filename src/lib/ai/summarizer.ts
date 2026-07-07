@@ -224,7 +224,6 @@ function buildRecommendations(results: ParsedLabResult[], context?: Recommendati
     food.add(`${valueSentence("Total cholesterol", totalCholesterol)}. Add one soluble-fiber food most days: oats, beans, lentils, apples, barley, or chia.`);
     food.add("Swap one regular saturated-fat choice, such as butter, cream, or fatty processed meat, for olive oil, nuts, avocado, or fish.");
     exercise.add("For cholesterol, aim for a repeatable cardio habit first: a brisk 20-30 minute walk on 5 days if that is safe for you.");
-    lifestyle.add("Make one default grocery swap this week: keep oats, beans, nuts, olive oil, or fish on hand and buy less butter, cream, or processed meat.");
   } else if (totalCholesterol) {
     food.add(`${normalValueSentence("Total cholesterol", totalCholesterol)}. Keep the pattern that is working: fiber-rich plants plus mostly unsaturated fats.`);
   }

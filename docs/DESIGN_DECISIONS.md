@@ -35,7 +35,7 @@ Concept: a private lens over lab reports. The icon concept is a rounded square w
 - Trend insights should follow the selected marker. When a user selects HDL, A1c, triglycerides, or another line, the explanation panel should only discuss that selected marker.
 - Trend insights should label the selected marker as Better, Worse, Stable, or Not enough data yet so the user does not have to infer meaning from the line direction alone.
 - Recommendations should name the relevant marker and value when possible, suggest small trackable habits, and avoid treatment, medication, or supplement-dose instructions.
-- The Routine recommendation section should read like daily behavior guidance: defaults, reminders, meal cues, drink habits, and small weekly checklists. Clinician questions and technical lab interpretation belong elsewhere.
+- The Routine recommendation section should read like daily behavior guidance: reminders, meal cues, drink habits, and small weekly checklists. Grocery and food swaps belong in Food so Routine does not repeat the same advice in less natural wording.
 - For A1c, glucose, and triglyceride food guidance, recommendations should plainly mention cutting back on sugary drinks, desserts, and refined carbs when relevant, while avoiding the misleading idea that all carbs should be eliminated.
 - Optional profile context can personalize fit and examples, but must not infer disease risk, change lab thresholds, or stereotype based on age, gender, country, ethnicity, job, or hobbies.
 - One login can manage more than one person's labs. The selected person is explicit during upload/manual entry and on the dashboard, because silently mixing household reports would make trends, latest values, and next steps unsafe and confusing.
@@ -50,6 +50,7 @@ Concept: a private lens over lab reports. The icon concept is a rounded square w
 - `My next steps` should prefer concrete marker-based actions, such as naming vitamin D food examples and using direct liver-marker actions that avoid extra alcohol, supplements, pain relievers, or hard workouts without telling users to stop prescribed care.
 - `My next steps` should hide low-value generic labels and profile-only explanation popovers; steps that only tell the user to prepare before the next lab are not shown as current action steps.
 - `My next steps` should avoid repeating the same action in both `Start here` and category groups, and should suppress near-duplicate actions such as multiple versions of the same sugar, starch, walk, sleep, or routine setup step.
+- `My next steps` should not show grocery-swap wording under Routine; those actions should either be Food steps or be hidden if they are redundant.
 - `My next steps` should not include filler maintenance advice like "keep your current habit steady" or broad planning advice like "pick one or two habits"; each visible step should name one concrete behavior.
 - In `My next steps`, each card should read vertically: step text first, then a wrapping footer row with labels and action buttons. Labels and buttons can share one row when space allows and wrap to a second row in narrow cards.
 - The Sleep, Routine, Food, and Movement cards should stay wide enough for footer labels and action buttons to fit naturally; avoid squeezing all four category cards into one desktop row.

@@ -29,7 +29,7 @@ const actionRules: Array<[RegExp, string]> = [
   [/At age .*build a baseline/i, "Pick one meal cue and one movement cue."],
   [/At age .*(protect consistency|make movement easier)/i, "Take a short walk or stretch after lunch or dinner."],
   [/At age .*joint-friendly movement/i, "Do joint-friendly movement this week."],
-  [/default grocery swap/i, "Make one default grocery swap."],
+  [/default grocery swap/i, "Add oats, beans, or olive oil to your list."],
   [/fasting instructions/i, "Follow fasting instructions for lab work."],
   [/weekday rule.*sweet drinks|sweet drinks.*planned times/i, "Set a weekday rule for sweet drinks."],
   [/sleep and wake times/i, "Keep sleep and wake times steady."],

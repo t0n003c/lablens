@@ -19,6 +19,7 @@ Last updated: 2026-07-06
 - Added dashboard review guidance for flagged values plus report-based food, movement, routine, and sleep recommendations.
 - Made recommendations marker-specific so food, movement, routine, and sleep suggestions reference actual report values such as A1c, total cholesterol, HDL, triglycerides, and vitamin D instead of broad generic advice.
 - Reworked routine recommendations so they sound like daily habits and behavior cues rather than technical lab notes.
+- Removed redundant grocery-swap wording from Routine next steps so food changes stay in the Food group.
 - Added optional person profile context for age, gender, country/region, cultural background or ethnicity, work, hobbies, and routine notes. Recommendations use this only for practical fit and visit preparation, not lab thresholds or medical risk assumptions.
 - Added multi-person support within one account: People can add/manage report profiles, upload/manual entry can assign a report to a person, dashboards can switch between people, Reports can filter by person, exports include people, and account data deletion resets to one clean default person.
 - Moved people management out of Settings into its own left-navigation People tab.
