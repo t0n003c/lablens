@@ -15,13 +15,20 @@
 - Phone-installable PWA support.
 - Docker Compose deployment.
 
-## Version 1.1.0 - Current Stable
+## Version 1.1.0
 
 - Premium mood-board aligned UI refresh for dashboard, auth, upload, settings, reports, people, and navigation.
 - Health-score hero, Start Here, My Next Steps grouping, refreshed status cards, and compact sidebar account menu.
 - System/Light/OLED Dark appearance support.
 - Expanded trend instrument with Trend, Compare, Distribution, zoom, point-specific tooltips, and selected-line insights.
 - Same-origin proxy guard for mutating API routes and expanded smoke audit coverage.
+
+## Version 1.1.1 - Current Stable
+
+- NAS HTTP login persistence fix for private LAN deployments.
+- Mobile PWA install copy clarified for iPhone Safari, iPhone Chrome, and Android local HTTP links.
+- Dedicated Apple touch icon for cleaner iOS home-screen installs.
+- Health-score color thresholds: 80-100 green, 70-79 yellow, and below 70 red.
 
 ## Version 1.2+
 

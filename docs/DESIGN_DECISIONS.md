@@ -59,6 +59,7 @@ Concept: a private lens over lab reports. The icon concept is a rounded square w
 - In `My next steps`, each card should read vertically: step text first, then a wrapping footer row with labels and action buttons. Labels and buttons can share one row when space allows and wrap to a second row in narrow cards.
 - The Sleep, Routine, Food, and Movement cards should stay wide enough for footer labels and action buttons to fit naturally; avoid squeezing all four category cards into one desktop row.
 - Dashboard should lead with a cautious health score. The score is a snapshot of report completeness, range flags, and trend coverage, not a diagnosis or medical grade.
+- Health score color should follow the score itself: 80-100 green, 70-79 yellow, and below 70 red. This keeps the top dashboard cue predictable even when the number of flagged values and trend coverage both affect the score.
 - Trend charts should offer range and zoom controls plus selected-line emphasis, because users need to explore changes without guessing what each line means.
 - Auth, sign-up, recovery, upload, processing, review, dashboard, reports, people, and settings must share the same visual system so a healthcare app feels consistent and trustworthy.
 - The clickable prototype lives in `docs/design/1.0-ui-refresh/prototype.html`; it is design-review material, while the Next.js app remains the source of truth for real behavior.
@@ -77,11 +78,12 @@ Concept: a private lens over lab reports. The icon concept is a rounded square w
 - The trend instrument now has working Trend, Compare, and Distribution modes. These are backed by the same saved report data and avoid unsupported controls: Trend shows the zoomable line chart, Compare shows first/latest movement by marker, and Distribution shows latest value within the saved range for the selected marker set.
 - Trend chart hover tooltips should describe one marker at one saved date, not every marker on that date, and only that hovered/selected marker should get the active point highlight. The first line/point click should select that marker immediately. Avoid persistent obvious readouts such as Latest update, Matched markers, Chart tools, or Latest point when the chart already communicates that context.
 - The mobile PWA install prompt should stay compact by default. It can ask to install the app, but it should not auto-expand instructions or cover the first health-score card.
+- The PWA install prompt should distinguish native install support from manual browser steps. Android/Chrome can show a native install button when the context is eligible; iPhone/iPad install should point to Safari's Add to Home Screen flow, because Chrome on iOS creates Chrome-branded shortcuts instead of a clean standalone LabLens app icon.
 - The expanded generated asset set has distinct jobs: trust/privacy, trend review, upload/review, and general report-lens imagery. Assets are not used as random decoration.
 
 ## Release Decisions
 
-- The current app is release `1.1.0`.
+- The current app is release `1.1.1`.
 - Future updates should be held locally and tested before asking for approval to push to GitHub or publish a new Docker image.
 
 ## Accessibility

@@ -6,7 +6,7 @@ LabLens uses Next.js App Router as a full-stack app because it keeps NAS hosting
 
 ## Release Model
 
-Release `1.1.0` is the current stable NAS-ready baseline. Future changes should be kept local and tested before any GitHub push, because pushing to `main` publishes a new `ghcr.io/t0n003c/lablens:latest` image.
+Release `1.1.1` is the current stable NAS-ready baseline. Future changes should be kept local and tested before any GitHub push, because pushing to `main` publishes a new `ghcr.io/t0n003c/lablens:latest` image.
 
 ## Docker Architecture
 
@@ -73,6 +73,11 @@ Reports can come from PDF, manual entry, or demo seed data. Lab values store par
 - `GET /api/account/export`
 - `DELETE /api/account/data`
 - `GET /api/health`
+
+Session cookies are HTTP-only and same-site. Cookie serialization is request-aware:
+HTTPS requests, HTTPS reverse-proxy headers, or an HTTPS browser origin receive
+the `Secure` attribute; plain HTTP LAN deployments do not. This keeps NAS
+testing over `http://host:port` usable without weakening HTTPS deployments.
 
 ## Dashboard Data Flow
 

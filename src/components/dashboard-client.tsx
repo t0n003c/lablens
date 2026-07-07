@@ -9,6 +9,7 @@ import { TrendInstrument } from "@/components/trend-instrument";
 import { buildNextStepDetails, type NextStepDetails } from "@/lib/action-plan/details";
 import { buildShortNextStep } from "@/lib/action-plan/shorten";
 import { demoResults, demoSummary, trendData } from "@/lib/demo/data";
+import { getHealthScoreStatusLabel } from "@/lib/health-score";
 import { buildTrendInsights, buildTrendPoint, getVisibleTrendMetrics, hasTrendValue, trendMetrics, type TrendMetricKey } from "@/lib/labs/trends";
 import type { HealthSummary, ParsedLabResult } from "@/lib/labs/types";
 
@@ -931,7 +932,7 @@ export function DashboardClient() {
             savedReportsValue={hasData ? `${reports.length}` : "Demo"}
             score={snapshotScore}
             scoreReason={scoreReason}
-            statusLabel={snapshotScore >= 85 ? "Steady snapshot" : snapshotScore >= 70 ? "Review a few items" : "Careful review"}
+            statusLabel={getHealthScoreStatusLabel(snapshotScore)}
             startHereCard={startHereCard}
           />
 

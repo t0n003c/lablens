@@ -8,6 +8,13 @@ type BeforeInstallPromptEvent = Event & {
   userChoice: Promise<{ outcome: "accepted" | "dismissed"; platform: string }>;
 };
 
+type InstallContext = {
+  apple: boolean;
+  appleNonSafari: boolean;
+  android: boolean;
+  secure: boolean;
+};
+
 const DISMISSED_UNTIL_KEY = "lablens-pwa-install-dismissed-until";
 const DISMISS_DAYS = 7;
 
@@ -19,13 +26,26 @@ function isStandaloneMode() {
 
 function isMobileDevice() {
   if (typeof window === "undefined") return false;
-  return window.matchMedia("(max-width: 820px)").matches || /Android|iPhone|iPad|iPod/i.test(window.navigator.userAgent);
+  const coarseSmallScreen = window.matchMedia("(pointer: coarse)").matches && window.matchMedia("(max-width: 920px)").matches;
+  return coarseSmallScreen || /Android|iPhone|iPad|iPod/i.test(window.navigator.userAgent);
 }
 
-function isAppleMobile() {
-  if (typeof window === "undefined") return false;
-  const nav = window.navigator as Navigator & { standalone?: boolean };
-  return /iPhone|iPad|iPod/i.test(window.navigator.userAgent) || nav.standalone !== undefined;
+function readInstallContext(): InstallContext {
+  if (typeof window === "undefined") {
+    return { apple: false, appleNonSafari: false, android: false, secure: true };
+  }
+  const nav = window.navigator as Navigator & { maxTouchPoints?: number; standalone?: boolean };
+  const userAgent = window.navigator.userAgent;
+  const iPadDesktopAgent = /Macintosh/i.test(userAgent) && (nav.maxTouchPoints ?? 0) > 1;
+  const apple = /iPhone|iPad|iPod/i.test(userAgent) || iPadDesktopAgent || nav.standalone !== undefined;
+  const appleNonSafari = apple && /CriOS|FxiOS|EdgiOS|OPiOS/i.test(userAgent);
+
+  return {
+    apple,
+    appleNonSafari,
+    android: /Android/i.test(userAgent),
+    secure: window.isSecureContext,
+  };
 }
 
 function hasDismissedRecently() {
@@ -50,7 +70,12 @@ export function PwaInstallPrompt() {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [visible, setVisible] = useState(false);
   const [showSteps, setShowSteps] = useState(false);
-  const [isApple, setIsApple] = useState(false);
+  const [installContext, setInstallContext] = useState<InstallContext>({
+    apple: false,
+    appleNonSafari: false,
+    android: false,
+    secure: true,
+  });
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -67,8 +92,8 @@ export function PwaInstallPrompt() {
 
     if (isStandaloneMode() || !isMobileDevice() || hasDismissedRecently()) return;
 
-    const appleDevice = isAppleMobile();
-    window.setTimeout(() => setIsApple(appleDevice), 0);
+    const context = readInstallContext();
+    window.setTimeout(() => setInstallContext(context), 0);
 
     const beforeInstall = (event: Event) => {
       event.preventDefault();
@@ -128,6 +153,25 @@ export function PwaInstallPrompt() {
 
   if (!visible) return null;
 
+  const hasNativeInstall = Boolean(deferredPrompt);
+  const promptTitle = hasNativeInstall ? "Install LabLens?" : installContext.appleNonSafari ? "Use Safari to install" : "Add LabLens to your phone";
+  const promptSummary = hasNativeInstall
+    ? "Use LabLens from your home screen."
+    : installContext.appleNonSafari
+      ? "Chrome on iPhone/iPad saves a Chrome shortcut. Open this page in Safari for the clean LabLens app icon."
+      : installContext.apple
+        ? "iPhone and iPad use Safari's Share menu to add LabLens."
+        : installContext.android && !installContext.secure
+          ? "This local link may only show manual steps. HTTPS enables the one-tap install button."
+          : "Use your browser menu if the install button is not available.";
+  const installSteps = installContext.appleNonSafari
+    ? "Open this same LabLens link in Safari, tap Share, then Add to Home Screen."
+    : installContext.apple
+      ? "In Safari, tap Share, then Add to Home Screen."
+      : installContext.android && !installContext.secure
+        ? "For one-tap install, use an HTTPS address. On this local link, open Chrome menu, then Add to Home screen."
+        : "Open your browser menu, then choose Install app or Add to Home screen.";
+
   return (
     <section className="fixed inset-x-3 bottom-20 z-50 rounded-md border border-border-soft bg-surface-glass p-3 shadow-[var(--shadow-glass)] backdrop-blur-xl sm:left-auto sm:right-4 sm:w-96 lg:bottom-4">
       <div className="flex items-center gap-3">
@@ -137,8 +181,8 @@ export function PwaInstallPrompt() {
         <div className="min-w-0 flex-1">
           <div className="flex items-start justify-between gap-2">
             <div>
-              <h2 className="text-sm font-semibold">Install LabLens?</h2>
-              <p className="mt-0.5 text-xs leading-5 text-muted">Open from your home screen.</p>
+              <h2 className="text-sm font-semibold">{promptTitle}</h2>
+              <p className="mt-0.5 text-xs leading-5 text-muted">{promptSummary}</p>
             </div>
             <button
               type="button"
@@ -152,12 +196,12 @@ export function PwaInstallPrompt() {
 
           {showSteps ? (
             <p className="mt-3 rounded-md border border-border-soft bg-panel/80 p-3 text-sm leading-6 text-muted">
-              {isApple ? (
+              {installContext.apple && !installContext.appleNonSafari ? (
                 <>
-                  On iPhone, tap <Share className="mx-1 inline size-4 align-[-2px]" aria-hidden="true" /> Share, then Add to Home Screen.
+                  In Safari, tap <Share className="mx-1 inline size-4 align-[-2px]" aria-hidden="true" /> Share, then Add to Home Screen.
                 </>
               ) : (
-                "Open your browser menu, then choose Install app or Add to Home screen."
+                installSteps
               )}
             </p>
           ) : null}
@@ -169,7 +213,7 @@ export function PwaInstallPrompt() {
               className="inline-flex min-h-10 items-center justify-center gap-2 rounded-md bg-primary px-3 text-sm font-semibold text-white shadow-sm transition hover:bg-primary-strong dark:text-[#02110f]"
             >
               <Download className="size-4" aria-hidden="true" />
-              {deferredPrompt ? "Install" : "How"}
+              {hasNativeInstall ? "Install" : "Steps"}
             </button>
             <button type="button" onClick={dismiss} className="inline-flex min-h-10 items-center justify-center rounded-md border border-border-soft bg-panel/70 px-3 text-sm font-semibold text-muted transition hover:border-primary/50 hover:bg-panel-muted hover:text-foreground">
               Not now

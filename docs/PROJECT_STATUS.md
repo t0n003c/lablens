@@ -4,9 +4,15 @@ Last updated: 2026-07-07
 
 ## Current Release
 
-- Current stable release: `1.1.0`.
-- Release `1.1.0` marks the current NAS-ready LabLens baseline with the audited UI and security refresh.
+- Current stable release: `1.1.1`.
+- Release `1.1.1` is the current NAS-ready patch release with HTTP LAN login persistence, clearer phone PWA install behavior, an iOS touch icon, and health-score color thresholds.
 - Future updates should remain local and fully tested until the user explicitly approves a GitHub push, release tag, or image publish.
+
+## Release 1.1.1 Work
+
+- Fixed NAS HTTP login persistence by making session cookies request-aware: HTTPS still receives `Secure` cookies, while private plain-HTTP LAN access can keep the login session instead of falling back to demo mode after account creation.
+- Clarified mobile PWA install behavior so iPhone/iPad users are directed to Safari for a clean LabLens home-screen icon, Android local HTTP users see why manual steps may appear, and iOS gets a dedicated Apple touch icon.
+- Updated dashboard health-score coloring so 80-100 is green, 70-79 is yellow, and below 70 is red.
 
 ## Release 1.1.0 Work
 

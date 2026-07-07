@@ -3,6 +3,7 @@ import type { NextRequest } from "next/server";
 import type { AuthenticatorTransportFuture, WebAuthnCredential } from "@simplewebauthn/server";
 import { APP_NAME } from "@/lib/constants";
 import { getEnv } from "@/lib/env";
+import { requestUsesHttps } from "@/lib/security/cookies";
 
 export const WEBAUTHN_REGISTER_COOKIE = "lablens_webauthn_register";
 export const WEBAUTHN_LOGIN_COOKIE = "lablens_webauthn_login";
@@ -31,11 +32,6 @@ function signSegment(segment: string) {
   return createHmac("sha256", getEnv().SESSION_SECRET).update(segment).digest("base64url");
 }
 
-function secureCookie(request: NextRequest) {
-  const forwardedProtocol = request.headers.get("x-forwarded-proto");
-  return forwardedProtocol === "https" || new URL(request.url).protocol === "https:" || process.env.NODE_ENV === "production";
-}
-
 function serializeCookie(name: string, value: string, request: NextRequest, maxAge: number) {
   return [
     `${name}=${value}`,
@@ -43,7 +39,7 @@ function serializeCookie(name: string, value: string, request: NextRequest, maxA
     "HttpOnly",
     "SameSite=Lax",
     `Max-Age=${maxAge}`,
-    secureCookie(request) ? "Secure" : "",
+    requestUsesHttps(request) ? "Secure" : "",
   ]
     .filter(Boolean)
     .join("; ");

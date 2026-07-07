@@ -2,10 +2,10 @@ import type { NextRequest } from "next/server";
 import { verifyAuthenticationResponse } from "@simplewebauthn/server";
 import type { AuthenticationResponseJSON } from "@simplewebauthn/server";
 import { z } from "zod";
-import { SESSION_COOKIE } from "@/lib/constants";
 import { getClientIp, jsonError } from "@/lib/http";
 import { prisma } from "@/lib/prisma";
 import { auditLog } from "@/lib/security/audit";
+import { serializeSessionCookie } from "@/lib/security/cookies";
 import { createSession } from "@/lib/security/session";
 import { clearChallengeCookie, readChallengeCookie, toWebAuthnCredential, WEBAUTHN_LOGIN_COOKIE } from "@/lib/security/webauthn";
 
@@ -77,9 +77,7 @@ export async function POST(request: NextRequest) {
   response.headers.append("Set-Cookie", clearChallengeCookie(WEBAUTHN_LOGIN_COOKIE, request));
   response.headers.append(
     "Set-Cookie",
-    `${SESSION_COOKIE}=${session.token}; Path=/; HttpOnly; SameSite=Lax; Expires=${session.expiresAt.toUTCString()}${
-      process.env.NODE_ENV === "production" ? "; Secure" : ""
-    }`,
+    serializeSessionCookie(session.token, session.expiresAt, request),
   );
   return response;
 }

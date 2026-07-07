@@ -3,10 +3,10 @@ import { generateAuthenticationOptions } from "@simplewebauthn/server";
 import type { AuthenticatorTransportFuture } from "@simplewebauthn/server";
 import { verify } from "otplib";
 import { z } from "zod";
-import { SESSION_COOKIE } from "@/lib/constants";
 import { assertSameOrigin, getClientIp, jsonError } from "@/lib/http";
 import { prisma } from "@/lib/prisma";
 import { auditLog } from "@/lib/security/audit";
+import { serializeSessionCookie } from "@/lib/security/cookies";
 import { verifyPassword } from "@/lib/security/password";
 import { rateLimit } from "@/lib/security/rate-limit";
 import { createSession } from "@/lib/security/session";
@@ -108,9 +108,7 @@ export async function POST(request: NextRequest) {
   });
   response.headers.append(
     "Set-Cookie",
-    `${SESSION_COOKIE}=${session.token}; Path=/; HttpOnly; SameSite=Lax; Expires=${session.expiresAt.toUTCString()}${
-      process.env.NODE_ENV === "production" ? "; Secure" : ""
-    }`,
+    serializeSessionCookie(session.token, session.expiresAt, request),
   );
   return response;
 }

@@ -1,6 +1,6 @@
 # Testing And Smoke Plan
 
-Current stable release: `1.1.0`
+Current stable release: `1.1.1`
 
 ## Release Gate
 
@@ -29,6 +29,8 @@ Current focused tests:
 - Trend insight filtering focuses notes on the selected trend marker.
 - Recommendations mention specific markers and values when the report contains actionable markers.
 - Recommendations can use optional profile context, including age and gender, for practical habit fit without identity-based medical claims or changed lab thresholds.
+- Session cookie serialization keeps login usable over private HTTP NAS links while preserving `Secure` cookies for HTTPS requests and reverse proxies.
+- Health score display uses fixed color thresholds: 80-100 green, 70-79 yellow, and below 70 red.
 - Local summary keeps non-diagnostic language.
 
 Run:
@@ -54,6 +56,9 @@ Completed locally and released for the 1.1.0 UI refresh:
 - Browser theme check passed: OLED Dark sets `data-theme="dark"`, Light sets `data-theme="light"`, System removes the override, selected buttons update `aria-pressed`, and no console errors were reported.
 - Final UI continuation check passed: active desktop/mobile navigation uses `aria-current`, Settings shows Appearance, Runtime protection, and Intelligence sections, the dead Turnstile button is gone, desktop Settings/Reports and mobile People have no horizontal overflow, and no browser console errors were reported.
 - Mood-board visual alignment check passed: generated glass/lab illustration now renders on Dashboard, Upload, Auth, and sidebar trust surfaces; desktop and mobile checks for Dashboard, Upload, Login, and Settings report no horizontal overflow and no console errors.
+- PWA/local preview follow-up on 2026-07-07: refreshed the local dev bundle after stale CSS caused white fallback borders, verified the desktop and 390px mobile dashboard have no horizontal overflow, confirmed `/api/health` is `ok`, confirmed the Apple touch icon is served, and passed `npm run lint`, `npm run test`, and `npm run build`.
+- NAS auth follow-up on 2026-07-07: added request-aware session cookie serialization and unit coverage for HTTP LAN, HTTPS, and reverse-proxy forwarded protocol behavior. Local HTTP auth smoke passed by registering a temporary account, confirming the session cookie did not include `Secure`, and confirming `/api/auth/me` recognized the cookie; the temporary account was removed afterward.
+- Release 1.1.1 validation on 2026-07-07: `npm run test`, `npm run lint`, `npm run build`, `npm run audit:deps`, `npx prisma validate`, `docker compose config --quiet`, `POSTGRES_PASSWORD=release-check docker compose -f docker-compose.image.yml config --quiet`, and `SMOKE_BASE_URL=http://127.0.0.1:3010 npm run smoke` passed before GitHub push approval.
 
 ## Smoke Tests
 
@@ -124,7 +129,9 @@ SMOKE_BASE_URL=http://localhost:3000 npm run smoke
 - Turn off biometric login from Settings and confirm password login works without the biometric step.
 - Confirm `/api/health` is `ok` or `degraded` with clear warnings.
 - On Android Chrome, open the app and confirm the install prompt can trigger installation.
-- On iPhone Safari, open the app and confirm the install prompt shows Add to Home Screen instructions.
+- On Android Chrome over a local HTTP/LAN link, confirm the prompt explains that HTTPS is needed for the one-tap install button and still gives Add to Home screen steps.
+- On iPhone Safari, open the app and confirm the prompt shows Share, then Add to Home Screen instructions and uses the LabLens touch icon.
+- On iPhone Chrome, confirm the prompt tells the user to open the link in Safari instead of making a Chrome-branded shortcut.
 
 ## Audit Checklist
 

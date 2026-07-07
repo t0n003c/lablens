@@ -1,6 +1,6 @@
 # Security And Privacy
 
-Current stable release: `1.1.0`
+Current stable release: `1.1.1`
 
 ## Safety Model
 
@@ -9,7 +9,7 @@ LabLens is educational software. It explains trends and flags values against sup
 ## Current Controls
 
 - Passwords are hashed with bcrypt.
-- Sessions use HTTP-only, same-site cookies.
+- Sessions use HTTP-only, same-site cookies. HTTPS requests receive `Secure` cookies; plain private-LAN HTTP keeps normal login usable for NAS testing.
 - Mutating API requests under `/api/*` pass through a same-origin proxy guard before route handlers run.
 - Uploads are PDF-only with configurable size limits.
 - Raw PDF storage is off by default.

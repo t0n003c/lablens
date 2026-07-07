@@ -1,6 +1,6 @@
 # NAS Deployment
 
-Current stable release: `1.1.0`
+Current stable release: `1.1.1`
 
 ## Recommended Topology
 
@@ -132,8 +132,14 @@ Set:
 
 - HTTPS only
 - `X-Forwarded-For` headers
+- `X-Forwarded-Proto: https` when TLS terminates at the proxy
 - Upload body limit aligned with `MAX_UPLOAD_MB`
 - Rate limits for `/api/auth/*` and `/api/reports/upload`
+
+LabLens can keep normal login sessions over a private plain-HTTP LAN URL such as
+`http://10.0.10.125:3449`. When HTTPS is used, the app marks session cookies
+`Secure` based on the request URL, common forwarded-protocol headers, or the
+browser origin.
 
 Biometric login depends on WebAuthn and therefore needs a secure browser context. `localhost` works for development, but LAN or internet phone testing should go through HTTPS.
 

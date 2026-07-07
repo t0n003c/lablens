@@ -1,9 +1,9 @@
 import type { NextRequest } from "next/server";
 import { z } from "zod";
-import { SESSION_COOKIE } from "@/lib/constants";
 import { assertSameOrigin, getClientIp, jsonError } from "@/lib/http";
 import { prisma } from "@/lib/prisma";
 import { auditLog } from "@/lib/security/audit";
+import { serializeSessionCookie } from "@/lib/security/cookies";
 import { hashPassword } from "@/lib/security/password";
 import { rateLimit } from "@/lib/security/rate-limit";
 import { createSession } from "@/lib/security/session";
@@ -60,9 +60,7 @@ export async function POST(request: NextRequest) {
   const response = Response.json({ user: { id: user.id, email: user.email, name: user.name } }, { status: 201 });
   response.headers.append(
     "Set-Cookie",
-    `${SESSION_COOKIE}=${session.token}; Path=/; HttpOnly; SameSite=Lax; Expires=${session.expiresAt.toUTCString()}${
-      process.env.NODE_ENV === "production" ? "; Secure" : ""
-    }`,
+    serializeSessionCookie(session.token, session.expiresAt, request),
   );
   return response;
 }

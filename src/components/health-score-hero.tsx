@@ -3,6 +3,7 @@ import { type ReactNode } from "react";
 import { AlertTriangle, FileText, ShieldCheck } from "lucide-react";
 import { GlassPanel } from "@/components/ui/glass-panel";
 import { MetricTile } from "@/components/ui/metric-tile";
+import { getHealthScoreTone } from "@/lib/health-score";
 
 export function HealthScoreHero({
   rawPdfStorageHref,
@@ -29,7 +30,7 @@ export function HealthScoreHero({
   statusLabel: string;
   startHereCard?: ReactNode;
 }) {
-  const scoreTone = reviewCount >= 3 ? "var(--score-careful)" : reviewCount ? "var(--score-review)" : "var(--score-good)";
+  const scoreTone = getHealthScoreTone(score);
   const reviewTone: "warning" | "success" = reviewCount ? "warning" : "success";
 
   return (
