@@ -1,0 +1,62 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  DATABASE_URL: postgresql://lablens:lablens_dev_password@localhost:5432/lablens?schema=public
+  SESSION_SECRET: ci-session-secret-change-only-for-github-checks
+  DATA_ENCRYPTION_KEY: ci-data-encryption-key-placeholder
+  POSTGRES_PASSWORD: release-check
+
+jobs:
+  validate:
+    name: Validate app
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 26
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Unit tests
+        run: npm run test
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Production build
+        run: npm run build
+
+      - name: Prisma schema validation
+        run: npx prisma validate
+
+      - name: Compose validation
+        run: |
+          docker compose config --quiet
+          docker compose -f docker-compose.image.yml config --quiet
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4
+
+      - name: Docker build validation
+        run: docker buildx build --load --platform linux/amd64 -t lablens-ci:${{ github.sha }} .

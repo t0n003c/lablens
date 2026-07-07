@@ -8,14 +8,14 @@ Accepted
 
 ## Context
 
-LabLens now has a working NAS deployment and a published container image. Pushing to GitHub triggers the image workflow, so ordinary pushes can become deployable updates.
+LabLens now has a working NAS deployment and a published container image. Earlier versions published a deployable image on every `main` push, which made ordinary code pushes too risky.
 
 ## Decision
 
-Treat the current app as release `1.1.1`. Future updates should be developed and tested locally first. Do not push to GitHub, create release tags, or trigger a container publish unless the user explicitly approves the release.
+Treat the current app as release `1.1.1`. Future updates should be developed and tested locally or in pull requests first. Pushes and pull requests run CI. Container publishing requires a separate, explicit run of the manual **Publish NAS Image** workflow with a version input.
 
 ## Consequences
 
 - Local changes can accumulate safely while the NAS keeps running the last approved image.
-- Release readiness depends on local test, lint, build, compose, and smoke checks before approval.
-- The GitHub `main` branch and `ghcr.io/t0n003c/lablens:latest` should represent approved work, not experiments.
+- Pull requests get automated test, lint, build, Prisma, Compose, and Docker build validation.
+- The GitHub `main` branch represents approved code, while `ghcr.io/t0n003c/lablens:latest` changes only after a manual publish.

@@ -52,7 +52,8 @@ curl http://localhost:3000/api/health
 
 ## Updates
 
-Only pull a newer image after the user has approved a GitHub push or release publish.
+Only pull a newer image after the user has approved a release and the manual
+**Publish NAS Image** GitHub workflow has completed successfully.
 
 Pull the latest published image and restart only changed containers:
 

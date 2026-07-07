@@ -1,0 +1,30 @@
+name: Release task
+description: Track a LabLens release from local validation to NAS pull.
+title: "[Release]: "
+labels: ["release"]
+body:
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      placeholder: "1.1.2"
+    validations:
+      required: true
+  - type: checkboxes
+    id: validation
+    attributes:
+      label: Validation
+      options:
+        - label: Tests passed
+        - label: Lint passed
+        - label: Build passed
+        - label: Compose configs passed
+        - label: Smoke test passed when needed
+        - label: PR reviewed and merged
+        - label: Publish NAS Image workflow completed
+        - label: NAS pulled and recreated the app container
+  - type: textarea
+    id: notes
+    attributes:
+      label: Release notes
+      description: Summarize user-facing changes, deployment notes, and rollback plan.

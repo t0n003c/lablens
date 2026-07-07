@@ -18,6 +18,9 @@ docker compose -f docker-compose.image.yml config --quiet
 
 Use `SMOKE_BASE_URL=http://localhost:3010 npm run smoke` for broad app, auth, upload, settings, People, reports, and action-plan changes.
 
+GitHub CI now runs test, lint, build, Prisma validation, Compose validation, and a
+Docker build on pull requests and `main` pushes. NAS image publishing is manual.
+
 ## Unit Tests
 
 Current focused tests:
@@ -59,6 +62,7 @@ Completed locally and released for the 1.1.0 UI refresh:
 - PWA/local preview follow-up on 2026-07-07: refreshed the local dev bundle after stale CSS caused white fallback borders, verified the desktop and 390px mobile dashboard have no horizontal overflow, confirmed `/api/health` is `ok`, confirmed the Apple touch icon is served, and passed `npm run lint`, `npm run test`, and `npm run build`.
 - NAS auth follow-up on 2026-07-07: added request-aware session cookie serialization and unit coverage for HTTP LAN, HTTPS, and reverse-proxy forwarded protocol behavior. Local HTTP auth smoke passed by registering a temporary account, confirming the session cookie did not include `Secure`, and confirming `/api/auth/me` recognized the cookie; the temporary account was removed afterward.
 - Release 1.1.1 validation on 2026-07-07: `npm run test`, `npm run lint`, `npm run build`, `npm run audit:deps`, `npx prisma validate`, `docker compose config --quiet`, `POSTGRES_PASSWORD=release-check docker compose -f docker-compose.image.yml config --quiet`, and `SMOKE_BASE_URL=http://127.0.0.1:3010 npm run smoke` passed before GitHub push approval.
+- GitHub workflow modernization on 2026-07-07: workflow and issue-template YAML parsed successfully, `npm run test`, `npm run lint`, `docker compose config --quiet`, and `POSTGRES_PASSWORD=release-check docker compose -f docker-compose.image.yml config --quiet` passed locally before push.
 
 ## Smoke Tests
 

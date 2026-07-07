@@ -13,6 +13,7 @@ Last updated: 2026-07-07
 - Fixed NAS HTTP login persistence by making session cookies request-aware: HTTPS still receives `Secure` cookies, while private plain-HTTP LAN access can keep the login session instead of falling back to demo mode after account creation.
 - Clarified mobile PWA install behavior so iPhone/iPad users are directed to Safari for a clean LabLens home-screen icon, Android local HTTP users see why manual steps may appear, and iOS gets a dedicated Apple touch icon.
 - Updated dashboard health-score coloring so 80-100 is green, 70-79 is yellow, and below 70 is red.
+- Switched GitHub to a safer workflow: CI runs on pull requests and `main`, while NAS image publishing is a separate manual GitHub Actions workflow with versioned tags.
 
 ## Release 1.1.0 Work
 
@@ -41,7 +42,7 @@ Last updated: 2026-07-07
 - Added multi-person support within one account: People can add/manage report profiles, upload/manual entry can assign a report to a person, dashboards can switch between people, Reports can filter by person, exports include people, and account data deletion resets to one clean default person.
 - Moved people management out of Settings into its own left-navigation People tab.
 - Added PWA install support with manifest, phone icons, service worker registration, and a mobile install prompt. The service worker avoids caching health data.
-- Added image-based NAS deployment support through `docker-compose.image.yml` and a GitHub Container Registry workflow that publishes `ghcr.io/t0n003c/lablens:latest`.
+- Added image-based NAS deployment support through `docker-compose.image.yml` and a GitHub Container Registry workflow that can publish `ghcr.io/t0n003c/lablens:latest`.
 - Made the container healthcheck NAS-friendly by checking multiple local app addresses before reporting the app unhealthy.
 - Updated NAS/image compose and `.env.nas.example` guidance so Postgres stays on a private Docker network, production database passwords are required, and `DATA_ENCRYPTION_KEY` is documented as a stable future-encryption secret.
 - Added editable PDF review/finalize flow so users can correct extracted rows, skip untrusted rows, and regenerate summaries before relying on the report.

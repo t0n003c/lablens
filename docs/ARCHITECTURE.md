@@ -6,7 +6,7 @@ LabLens uses Next.js App Router as a full-stack app because it keeps NAS hosting
 
 ## Release Model
 
-Release `1.1.1` is the current stable NAS-ready baseline. Future changes should be kept local and tested before any GitHub push, because pushing to `main` publishes a new `ghcr.io/t0n003c/lablens:latest` image.
+Release `1.1.1` is the current stable NAS-ready baseline. Future changes should be kept local or in pull requests until reviewed and tested. Pushing or merging to `main` runs CI; publishing `ghcr.io/t0n003c/lablens:latest` now requires the manual **Publish NAS Image** GitHub workflow.
 
 ## Docker Architecture
 
@@ -15,6 +15,8 @@ Release `1.1.1` is the current stable NAS-ready baseline. Future changes should 
 - Volumes: `lablens_postgres`, `lablens_uploads`.
 - `docker-compose.yml`: local source-build workflow with the database published on host port `5433` for development tools.
 - `docker-compose.image.yml`: NAS/image workflow using `ghcr.io/t0n003c/lablens:latest`, a private `lablensInternal` database network, and no published Postgres port.
+- `.github/workflows/ci.yml`: pull-request and main-branch validation without publishing an image.
+- `.github/workflows/publish-image.yml`: manual multi-architecture GHCR publish for NAS deployments.
 
 ## Folder Structure
 

@@ -6,6 +6,18 @@ Current stable release: `1.1.1`
 
 Future updates must stay local until the user explicitly approves a GitHub push, release tag, or image publish.
 
+## GitHub-First Flow
+
+Use pull requests for normal work:
+
+1. Create or link a GitHub issue.
+2. Work on a branch.
+3. Open a pull request.
+4. Let the `CI` workflow pass.
+5. Merge only approved work into `main`.
+
+Pushing or merging to `main` runs CI but does not publish the NAS image.
+
 ## Local Validation
 
 Before asking for release approval, run the checks that match the change:
@@ -30,8 +42,10 @@ Only after explicit approval:
 
 1. Commit the tested local changes.
 2. Push to GitHub.
-3. Confirm the GitHub Container Registry image publish succeeds.
-4. Optionally create a `vX.Y.Z` tag when a durable version tag is wanted.
-5. Update NAS with `docker compose pull app` and `docker compose up -d --force-recreate app`.
+3. Confirm the `CI` workflow succeeds.
+4. Run the manual **Publish NAS Image** workflow with the approved version.
+5. Confirm the GitHub Container Registry image publish succeeds.
+6. Update NAS with `docker compose pull app` and `docker compose up -d --force-recreate app`.
 
-Pushing to `main` publishes `ghcr.io/t0n003c/lablens:latest`, so do not push unfinished work.
+The publish workflow can create `latest`, `<version>`, and `v<version>` image tags.
+Do not run **Publish NAS Image** for unfinished work.
